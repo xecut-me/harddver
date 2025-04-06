@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="utf-8"/>
     <style>
         .digit {
             background-image: url('./digits.png');
@@ -26,6 +27,11 @@
             line-height: 1;
         }
 
+        .pr {
+            color: red;
+            font-size: 20px;
+        }
+
         body {
             display: flex;
             align-items: center;
@@ -44,7 +50,6 @@
         (under<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;construction)
     </div>
-    <div>Присылайте пулл реквесты в https://enovikov11.github.io/xecut_harddver/ <span id="version"></span></div>
     <div class="container">
         <div class="item digit"></div>
         <div class="item digit"></div>
@@ -71,7 +76,9 @@
         <div class="item digit"></div>
         <div class="item digit"></div>
     </div>
-    <div style="margin-top: 30px;">
+    <div class="pr"><span id="version"></span> Присылайте пулл реквесты в <span style="text-decoration: underline;
+">https://enovikov11.github.io/xecut_harddver/</span></div>
+    <div style="margin-top: 20px;">
         <span><img src="./snowflake.jpg" style="height: 400px;margin: 0 20px;"></img></span>
         <span><img src="./xecut_tg.jpg" style="height: 400px;margin: 0 20px;"></img></span>
         <span><img src="./xecut.png" style="height: 400px;margin: 0 20px;"></img></span>
@@ -107,8 +114,20 @@
             videoElement.srcObject = stream;
         }
 
+        async function update() {
+            const v = await fetch("./version.txt").then(res=>res.text());
+            document.querySelector("#version").innerText = v;
+
+            if (v != localStorage.harddverVersion) {
+                localStorage.harddverVersion = v;
+                location.reload();
+            }
+        }
+
         render();
         startCamera();
+        setInterval(update, 10000);
+        update();
     </script>
 
 </body>
