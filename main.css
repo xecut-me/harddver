@@ -1,0 +1,58 @@
+.text {
+    color: red;
+    font-size: 85px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.container {
+    height: 170px;
+}
+
+.digit {
+    background-image: url('./img/digits.png');
+    background-repeat: no-repeat;
+}
+
+.item {
+    width: 68px;
+    height: 150px;
+    display: inline-block;
+}
+
+.pr {
+    color: red;
+    font-size: 20px;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.imgs {
+    margin-top: 20px;
+}
+
+.img {
+    height: 400px;
+    margin: 0 20px;
+}
+
+#camera {
+    width: 533px;
+    height: 400px;
+    margin: 0 20px;
+    transform: scaleX(-1);
+}
+
+body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    background-color: black;
+    cursor: none;
+    user-select: none;
+}
