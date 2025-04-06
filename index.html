@@ -116,7 +116,7 @@
         }
 
         async function update() {
-            const v = await fetch("./version.txt").then(res=>res.text());
+            const v = await fetch("./version.txt", {cache: "no-store"}).then(res=>res.text());
             document.querySelector("#version").innerText = v;
 
             if (v != localStorage.harddverVersion) {
