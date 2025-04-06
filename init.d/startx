@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+name="startx"
+command="/usr/bin/startx"
+command_background=true
+pidfile="/run/startx.pid"
+
+depend() {
+    need localmount
+    use net logger dbus
+    after bootmisc
+}

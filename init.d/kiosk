@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+
+name="kiosk"
+command="/usr/bin/chromium"
+command_args="--no-sandbox --kiosk --no-first-run --disable-infobars --noerrdialogs https://enovikov11.github.io/xecut_harddver/"
+command_background=true
+pidfile="/run/kiosk.pid"
+
+depend() {
+ need startx
+}
+
+start_pre() {
+    export DISPLAY=:0
+}
