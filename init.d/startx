@@ -4,6 +4,7 @@ name="startx"
 command="/usr/bin/startx"
 command_background=true
 pidfile="/run/startx.pid"
+#command_user="kiosk:kiosk"
 
 depend() {
     need localmount
