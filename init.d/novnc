@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+name="novnc"
+command="/root/noVNC/utils/novnc_proxy"
+command_args="--vnc localhost:5900 --listen localhost:6080"
+command_background=true
+pidfile="/run/novnc.pid"
+#command_user="kiosk:kiosk"
+
+depend() {
+ need x11vnc
+}

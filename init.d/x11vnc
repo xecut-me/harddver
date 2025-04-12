@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+name="x11vnc"
+command="/usr/bin/x11vnc"
+command_args="-display :0 -localhost -nopw -forever"
+command_background=true
+pidfile="/run/x11vnc.pid"
+#command_user="kiosk:kiosk"
+
+depend() {
+ need startx
+}
