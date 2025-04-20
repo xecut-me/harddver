@@ -59,3 +59,18 @@ body {
     transform: rotate(-2.55deg) scale(0.95);
     overflow: hidden;
 }
+
+/* Backdoor Indicator */
+#backdoorIndicator {
+    position: absolute;
+    top: 500px;
+    left: 300px;
+    background: red;
+    padding: 1em;
+    text-decoration: line-through;
+    font-weight: bold;
+}
+
+#backdoorIndicator.hidden {
+    display: none;
+}
