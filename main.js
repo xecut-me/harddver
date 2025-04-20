@@ -34,7 +34,16 @@ async function update() {
     }
 }
 
+async function get_backdoor_state() {
+   const myHeaders = new Headers();
+   myHeaders.append("Content-Type", "application/json");
+   myHeaders.append('Authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1YzY0NDg0Y2NjNmE0N2VjOTY5Yzk2MjBlNmY4OWI5NSIsImlhdCI6MTc0NTE3MjA5NSwiZXhwIjoyMDYwNTMyMDk1fQ.bTSqlafXk-i7f0EOp2ENDqll7wNUucVoFaLjZqd53xo')
+   const v = await fetch('https://haos.xecut.me/api/states/switch.esp_door_1_backdoor_switch',{headers:myHeaders}).then(es => res.json());
+   
+}
+
 render();
 startCamera();
 setInterval(update, 10000);
+setInterval(get_backdoor_state, 10000);
 update();
