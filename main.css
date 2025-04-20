@@ -56,6 +56,6 @@ body {
     background-color: black;
     cursor: none;
     user-select: none;
-    transform: rotate(-2.9deg);
+    transform: rotate(-2.55deg) scale(0.95);
     overflow: hidden;
 }
