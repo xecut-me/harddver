@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+name="kiosk"
+command="/usr/bin/chromium"
+command_args="--kiosk --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream https://xecut-me.github.io/harddver/"
+command_background=true
+pidfile="/run/kiosk.pid"
+command_user="kiosk:kiosk"
+
+start_pre() {
+    export DISPLAY=:0
+}
