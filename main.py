@@ -93,6 +93,8 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def init(app: Application) -> None:
     subprocess.run(["killall", "-9", "chrome"])
     subprocess.run(["killall", "-9", "chromedriver"])
+
+    run_webdriver()
     
     thread = threading.Thread(target=run_http_server, daemon=True)
     thread.start()
