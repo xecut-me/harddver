@@ -8,6 +8,7 @@ from telegram import Update
 import subprocess
 import functools
 import threading
+import socket
 import signal
 import json
 import sys
@@ -86,14 +87,23 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def init(app: Application) -> None:
     result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
     commit_hash = result.stdout.strip()
+
+    subprocess.run(["killall", "-9", "chrome"])
+    subprocess.run(["killall", "-9", "chromedriver"])
     
     await application.bot.send_message(chat_id=admin_chat_id, text=f"🎉 Я запустился! Версия https://github.com/xecut-me/harddver/tree/{commit_hash}")
 
 def cleanup(signum, frame):
     driver.quit()
-    # subprocess.run(["pkill", "-f", "chrome"])
-    # subprocess.run(["pkill", "-f", "chromedriver"])
     sys.exit(0)
+
+def is_vnc_port_taken(host='127.0.0.1', port=5900):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind((host, port))
+            return False
+        except OSError:
+            return True
 
 
 signal.signal(signal.SIGINT, cleanup)
@@ -125,7 +135,10 @@ thread.start()
 os.environ["DISPLAY"] = ":0"
 
 options = Options()
-options.add_argument("--kiosk")
+
+if not is_vnc_port_taken():
+    options.add_argument("--kiosk")
+
 options.add_argument("--no-first-run")
 options.add_argument("--disable-infobars")
 options.add_argument("--noerrdialogs")
