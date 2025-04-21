@@ -22,9 +22,13 @@ state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
 
 def admin_only(func):
     async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if update.message.forward_from or update.message.forward_from_chat:
+            return
+        
         if update.effective_chat.id != admin_chat_id:
             await update.message.reply_text(no_auth_msg)
             return
+        
         await func(update, context)
     return wrapper
 
