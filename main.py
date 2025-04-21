@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from telegram import Update
+from mss import mss
 import subprocess
 import functools
 import threading
@@ -90,6 +91,16 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sys.exit(0)
 
 
+@admin_only
+async def screenshot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    with mss() as sct:
+        screenshot_path = "./screenshot.png"
+        sct.shot(output=screenshot_path)
+
+    with open(screenshot_path, 'rb') as f:
+        await update.message.reply_photo(photo=f)
+
+
 async def init(app: Application) -> None:
     await application.bot.send_message(chat_id=admin_chat_id, text=f"🎉 Я запустился! Версия https://github.com/xecut-me/harddver/tree/{commit_hash}")
 
@@ -158,6 +169,7 @@ application.add_handler(CommandHandler("reload", reload_handler))
 application.add_handler(CommandHandler("produrl", produrl_handler))
 application.add_handler(CommandHandler("url", url_handler))
 application.add_handler(CommandHandler("deploy", deploy_handler))
+application.add_handler(CommandHandler("screenshot", screenshot_handler))
 application.add_handler(MessageHandler(filters.ALL, message_handler))
 
 application.run_polling()
