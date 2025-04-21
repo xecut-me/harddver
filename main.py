@@ -17,6 +17,7 @@ import os
 admin_chat_id = -1002571293789
 no_auth_msg = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
 DEFAULT_URL = "http://127.0.0.1:8000/"
+state = "🌐🔒 Загружен продовый URL {DEFAULT_URL}"
 
 
 def admin_only(func):
@@ -37,13 +38,14 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @admin_only
 async def reload_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.refresh()
-    await update.message.reply_text("🔄 Страница перезагружена")
+    await update.message.reply_text("🔄 Страница перезагружена " + state)
 
 
 @admin_only
 async def produrl_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.get(DEFAULT_URL)
-    await update.message.reply_text("🌐🔒 Загружен продовый URL {DEFAULT_URL}")
+    state = "🌐🔒 Загружен продовый URL {DEFAULT_URL}"
+    await update.message.reply_text(state)
 
 
 @admin_only
@@ -51,10 +53,11 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
         custom_url = context.args[0]
         driver.get(custom_url)
-        await update.message.reply_text(f"🌐🧪 Загружен тестовый URL {custom_url}")
+        state = f"🌐🧪 Загружен тестовый URL {custom_url}"
+        await update.message.reply_text(state)
     else:
-        driver.get(DEFAULT_URL)
-        await update.message.reply_text("🌐🔒 Загружен продовый URL {DEFAULT_URL}")
+        state = "🌐🔒 Загружен продовый URL {DEFAULT_URL}"
+        await update.message.reply_text(state)
 
 
 @admin_only
