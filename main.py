@@ -1,8 +1,8 @@
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
+from secret import SECRET_TELEGRAM_API_KEY, BACKDOOR_AUTH, BACKDOOR_URL
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from secret import SECRET_TELEGRAM_API_KEY
 from selenium import webdriver
 from telegram import Update
 import subprocess
@@ -93,14 +93,30 @@ def cleanup(signum, frame):
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-handler_class = functools.partial(SimpleHTTPRequestHandler, directory="./static/")
-httpd = HTTPServer(("127.0.0.1", 8000), handler_class)
 
-def serve():
+
+class MyHandler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == "/secrets":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            data = {"BACKDOOR_AUTH": BACKDOOR_AUTH, "BACKDOOR_URL": BACKDOOR_URL}
+            self.wfile.write(json.dumps(data).encode("utf-8"))
+        else:
+
+            super().do_GET()
+
+def run_server():
+    handler_class = functools.partial(MyHandler, directory="./static/")
+    httpd = HTTPServer(("127.0.0.1", 8000), handler_class)
     httpd.serve_forever()
 
-thread = threading.Thread(target=serve, daemon=True)
+
+thread = threading.Thread(target=run_server, daemon=True)
 thread.start()
+
+
 
 os.environ["DISPLAY"] = ":0"
 

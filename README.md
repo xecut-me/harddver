@@ -1,20 +1,35 @@
-# xecut_harddver
+# Хард Дверь = hardware дверь
 
-Это страница двери в хакспейс xecut, присылайте пулл реквесты ;)
+Это страница двери в хакспейс Xecut, присылайте пулл реквесты ;)  
 
-Чат с админкой https://t.me/+IBkZEqKkqRlhNGQy
+Дверь это бывший 16.5" ноут, разобранный и приклеенный 3M липкой лентой к двери  
+
+Чтобы задеплоить пинганите https://t.me/enovikov11 или вступвйте в чат с админкой https://t.me/+IBkZEqKkqRlhNGQy  
 
 <img src="./docs/detailed.jpg"></img><br/>
-
 <img src="./docs/pano.jpg"></img><br/>
-
 <img src="./docs/back.jpg"></img><br/>
 
-hardware (дверь) = harddver
+# Разработчику
 
-# Первоначальная установка
+Телеграм ботик, он же http сервер, он же chromium с selenium для управления это main.py.  
 
-на базе alpine, установлены пакеты  
+Статический сайт расположен в ./static  
+
+## Команды @harddver_bot
+
+reload - Обновить страницу
+produrl - Вернуть URL на продовый
+url - Установить кастомный URL
+deploy - Передеплоить бота
+
+# Владельцу
+
+## Как налить все с нуля
+
+1. Установить https://alpinelinux.org  
+
+2. Выполнить команды  
 
 ```bash
 apk add --no-cache xorg-server xf86-video-intel xf86-input-evdev xinit chromium openbox chromium \
@@ -23,35 +38,41 @@ apk add --no-cache xorg-server xf86-video-intel xf86-input-evdev xinit chromium 
 pip install selenium==4.31.0 python-telegram-bot==20.5 --break-system-packages
 ```
 
-# Power usage
+3. Настроить иксы, профиль и openrc файлы, см папку linux
 
-poweroff 0.3W  
-idle 8.5-9W  
-load 15-18W  
+## Управление openrc сервисом
 
-# Команды бота
-
-reload - Обновить страницу
-produrl - Вернуть URL на продовый
-url - Установить кастомный URL
-deploy - Передеплоить бота
-
-# Разное, VNC
-
-ssh -L 6080:localhost:6080 kiosk
-http://localhost:6080/vnc.html?autoconnect=1&resize=scale
-/usr/bin/x11vnc -display :0 -localhost -nopw -forever
-~/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen localhost:6080
-
+```bash
 rc-service kiosk stop
 rc-service kiosk start
 rc-update del kiosk
 rc-update add kiosk default
+```
 
-rsync -rz --info=progress2 --delete ~/Desktop/xecut_harddver/ kiosk:/root/kiosk-website/
+## VNC
 
-DISPLAY=:0 /usr/bin/chromium --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream --kiosk http://192.168.1.58:8000/
+http://localhost:6080/vnc.html?autoconnect=1&resize=scale
 
-DISPLAY=:0 /usr/bin/chromium --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream file:///root/kiosk-website/index.html
+```bash
+ssh -L 6080:localhost:6080 kiosk
 
+/usr/bin/x11vnc -display :0 -localhost -nopw -forever
+
+~/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen localhost:6080
+```
+
+## Power usage
+
+poweroff 0.3W  
+idle 8.5-9W  
+under full load 15-18W  
+
+## Как тестить ботика без гитхаба
+
+```bash
 scp ~/Desktop/xecut/harddver/main.py kiosk@kiosk:/home/kiosk/harddver/main.py
+
+DISPLAY=:0 /usr/bin/chromium --kiosk --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream  http://192.168.1.58:8000/
+
+DISPLAY=:0 /usr/bin/chromium --kiosk --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream file:///root/kiosk-website/index.html
+```
