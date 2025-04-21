@@ -49,6 +49,8 @@ async function initBackdoor() {
     BACKDOOR_AUTH = secrets.BACKDOOR_AUTH;
     BACKDOOR_URL = secrets.BACKDOOR_URL;
 
+    alert(BACKDOOR_AUTH + " " + BACKDOOR_URL);
+
     setInterval(getBackdoorState, 10000);
     getBackdoorState();
 }
