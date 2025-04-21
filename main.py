@@ -75,7 +75,11 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @admin_only
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subprocess.run(["git", "pull"])
-    await update.message.reply_text("🚀 git pull = ok, крешимся для перезапуска супервизором 😂")
+    await update.message.reply_text("🚀 git pull = ok")
+
+    driver.quit()
+    await update.message.reply_text("🚀 driver.quit() = ok, крешимся для перезапуска супервизором 😂")
+    
     sys.exit(0)
 
 
@@ -87,12 +91,13 @@ async def init(app: Application) -> None:
 
 def cleanup(signum, frame):
     driver.quit()
+    # subprocess.run(["pkill", "-f", "chrome"])
+    # subprocess.run(["pkill", "-f", "chromedriver"])
     sys.exit(0)
 
 
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
-
 
 
 class MyHandler(SimpleHTTPRequestHandler):
@@ -104,7 +109,6 @@ class MyHandler(SimpleHTTPRequestHandler):
             data = {"BACKDOOR_AUTH": BACKDOOR_AUTH, "BACKDOOR_URL": BACKDOOR_URL}
             self.wfile.write(json.dumps(data).encode("utf-8"))
         else:
-
             super().do_GET()
 
 def run_server():

@@ -56,7 +56,7 @@ http://localhost:6080/vnc.html?autoconnect=1&resize=scale
 ```bash
 ssh -L 6080:localhost:6080 kiosk
 
-/usr/bin/x11vnc -display :0 -localhost -nopw -forever
+/usr/bin/x11vnc -display :0 -localhost -nopw -forever -enc tight -repeat -nosel -nossl
 
 ~/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen localhost:6080
 ```
