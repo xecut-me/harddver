@@ -35,3 +35,16 @@ apk add xorg-server xf86-video-intel xf86-input-evdev xinit chromium fluxbox
 poweroff 0.3W  
 idle 8.5-9W  
 load 15-18W  
+
+# докер
+
+docker build -t kiosk .
+
+docker run --name kiosk -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-unix --restart=unless-stopped kiosk
+
+# бот
+
+reload - Обновить страницу
+produrl - Вернуть URL на продовый
+url - Установить кастомный URL
+deploy - Передеплоить бота
