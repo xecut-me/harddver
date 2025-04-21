@@ -46,12 +46,14 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @admin_only
 async def reload_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("NOT IMPLEMENTED 🔄 Страница обновлена")
+    driver.refresh()
+    await update.message.reply_text("🔄 Страница обновлена")
 
 
 @admin_only
 async def produrl_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("NOT IMPLEMENTED 🌐 Продовый URL: https://example.com")
+    driver.get(DEFAULT_URL)
+    await update.message.reply_text("🌐 Продовый URL: " + DEFAULT_URL)
 
 
 @admin_only
@@ -59,13 +61,16 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text("❗ Укажите URL после команды.")
         return
+    
     custom_url = context.args[0]
-    await update.message.reply_text(f"NOT IMPLEMENTED ✅ Кастомный URL установлен: {custom_url}")
+    driver.get(custom_url)
+    await update.message.reply_text(f"✅ Кастомный URL установлен: {custom_url}")
 
 
 @admin_only
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("NOT IMPLEMENTED 🚀 Бот деплоится...")
+    await update.message.reply_text("NOT YET IMPLEMENTED FULLY (бот крашнется и будет перезапущен супервизором, git pull все равно нужен) 🚀 Бот деплоится...")
+    sys.exit(0)
 
 
 def cleanup(signum, frame):

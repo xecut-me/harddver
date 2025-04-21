@@ -2,10 +2,13 @@
 
 name="kiosk"
 command="/usr/bin/python3"
-command_args="/home/kiosk/harddver/main.py"
+command_args="main.py"
 command_background=true
 pidfile="/run/kiosk.pid"
 command_user="kiosk:kiosk"
+directory="/home/kiosk/harddver"
+supervisor="supervise-daemon"
+supervise_daemon_args="--respawn-delay 5 --respawn-max 0 --respawn-period 60"
 
 start_pre() {
     export DISPLAY=:0
