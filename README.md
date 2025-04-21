@@ -41,6 +41,16 @@ pip install selenium==4.31.0 python-telegram-bot==20.5 mss==10.0.0 --break-syste
 
 3. Настроить иксы, профиль и openrc файлы, см папку linux
 
+## Дебаг хрома
+
+<img src="./docs/debug.png"></img>
+
+```bash
+ssh -L 9222:localhost:9222 kiosk
+```
+
+chrome://inspect/#devices
+
 ## Управление openrc сервисом
 
 ```bash
