@@ -3,7 +3,7 @@ const positions = [8, 9, 5, 6, 0, 1, 2, 3, 11, 12, 14, 15, 17, 18, 20, 21, 22];
 const offset = new Date().getTimezoneOffset() * 60000;
 let lastTime = "";
 
-function render() {
+function renderTimer() {
     const time = new Date(Date.now() - offset).toISOString();
 
     for (let i = 0; i < positions.length; i++) {
@@ -15,17 +15,16 @@ function render() {
     }
 
     lastTime = time;
-    requestAnimationFrame(render);
+    requestAnimationFrame(renderTimer);
 }
 
 async function startCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    const videoElement = document.getElementById('camera');
+    const videoElement = document.getElementById("camera");
     videoElement.srcObject = stream;
 }
 
-
-async function get_backdoor_state() {
+async function getBackdoorState() {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1YzY0NDg0Y2NjNmE0N2VjOTY5Yzk2MjBlNmY4OWI5NSIsImlhdCI6MTc0NTE3MjA5NSwiZXhwIjoyMDYwNTMyMDk1fQ.bTSqlafXk-i7f0EOp2ENDqll7wNUucVoFaLjZqd53xo')
@@ -33,20 +32,24 @@ async function get_backdoor_state() {
     const backdoorState = await fetch('https://haos.xecut.me/api/states/switch.esp_door_1_backdoor_switch', { headers: myHeaders })
         .then(res => res.json())
         .then(({ state }) => state)
-        .catch(() => 'off')
+        .catch(() => "off")
 
-    const backdoorIndicator = document.querySelector('#backdoorIndicator')
+    const backdoorIndicator = document.querySelector("#backdoorIndicator");
 
-    const hiddenClass = 'hidden'
+    const hiddenClass = "hidden";
     backdoorIndicator.classList.add(hiddenClass)
-    if (backdoorState === 'on') {
+    if (backdoorState === "on") {
         backdoorIndicator.classList.remove(hiddenClass)
     }
 }
 
-render();
-startCamera();
-setInterval(update, 10000);
+function onMessage(message) {
+    return "Привет! " + message.slice(0, 10);
+}
 
-get_backdoor_state();
-setInterval(get_backdoor_state, 10000);
+renderTimer();
+
+startCamera();
+
+setInterval(getBackdoorState, 10000);
+getBackdoorState();

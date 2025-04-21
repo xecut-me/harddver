@@ -34,9 +34,17 @@ def admin_only(func):
 
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        json.dumps(update.to_dict(), ensure_ascii=False, indent=2)
-    )
+    message = json.dumps(update.to_dict(), ensure_ascii=False)
+
+    try:
+        response = driver.execute_script("return onMessage(arguments[0]);", message)
+    except Exception as e:
+    
+        print(f"JS error: {e}")
+        response = None
+    
+    if response:
+        await update.message.reply_text(response)
 
 
 @admin_only
@@ -94,7 +102,7 @@ def serve():
 thread = threading.Thread(target=serve, daemon=True)
 thread.start()
 
-os.environ['DISPLAY'] = ':0'
+os.environ["DISPLAY"] = ":0"
 
 options = Options()
 options.add_argument("--kiosk")
