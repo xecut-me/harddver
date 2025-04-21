@@ -121,7 +121,7 @@ thread.start()
 os.environ["DISPLAY"] = ":0"
 
 options = Options()
-options.add_argument("--kiosk")
+# options.add_argument("--kiosk")
 options.add_argument("--no-first-run")
 options.add_argument("--disable-infobars")
 options.add_argument("--noerrdialogs")
