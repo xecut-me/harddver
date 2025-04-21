@@ -152,6 +152,7 @@ options = Options()
 if not is_vnc_port_taken():
     options.add_argument("--kiosk")
 
+options.add_argument("--remote-debugging-port=9222")
 options.add_argument("--no-first-run")
 options.add_argument("--disable-infobars")
 options.add_argument("--noerrdialogs")
