@@ -24,24 +24,15 @@ async function startCamera() {
     videoElement.srcObject = stream;
 }
 
-async function update() {
-    const v = await fetch(`./version.txt?_=${Date.now()}`, { cache: "no-store" }).then(res => res.text());
-    document.querySelector("#version").innerText = v;
-
-    if (v != localStorage.harddverVersion) {
-        localStorage.harddverVersion = v;
-        location.reload();
-    }
-}
 
 async function get_backdoor_state() {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append('Authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1YzY0NDg0Y2NjNmE0N2VjOTY5Yzk2MjBlNmY4OWI5NSIsImlhdCI6MTc0NTE3MjA5NSwiZXhwIjoyMDYwNTMyMDk1fQ.bTSqlafXk-i7f0EOp2ENDqll7wNUucVoFaLjZqd53xo')
+    myHeaders.append('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1YzY0NDg0Y2NjNmE0N2VjOTY5Yzk2MjBlNmY4OWI5NSIsImlhdCI6MTc0NTE3MjA5NSwiZXhwIjoyMDYwNTMyMDk1fQ.bTSqlafXk-i7f0EOp2ENDqll7wNUucVoFaLjZqd53xo')
 
-    const backdoorState = await fetch('https://haos.xecut.me/api/states/switch.esp_door_1_backdoor_switch',{headers:myHeaders})
+    const backdoorState = await fetch('https://haos.xecut.me/api/states/switch.esp_door_1_backdoor_switch', { headers: myHeaders })
         .then(res => res.json())
-        .then(({state}) => state)
+        .then(({ state }) => state)
         .catch(() => 'off')
 
     const backdoorIndicator = document.querySelector('#backdoorIndicator')
@@ -59,4 +50,3 @@ setInterval(update, 10000);
 
 get_backdoor_state();
 setInterval(get_backdoor_state, 10000);
-update();
