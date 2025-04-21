@@ -1,8 +1,8 @@
 #!/sbin/openrc-run
 
 name="kiosk"
-command="/usr/bin/chromium"
-command_args="--kiosk --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream https://xecut-me.github.io/harddver/"
+command="/usr/bin/python3"
+command_args="/home/kiosk/harddver/main.py"
 command_background=true
 pidfile="/run/kiosk.pid"
 command_user="kiosk:kiosk"

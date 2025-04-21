@@ -12,46 +12,31 @@
 
 hardware (дверь) = harddver
 
-# contibute
-
-запускаем
-
-```bash
-python3 -m http.server
-```
-
-заходим на http://localhost:8000/
-
-# технические детали
+# Первоначальная установка
 
 на базе alpine, установлены пакеты  
 
 ```bash
-apk add xorg-server xf86-video-intel xf86-input-evdev xinit chromium fluxbox
+apk add --no-cache xorg-server xf86-video-intel xf86-input-evdev xinit chromium openbox chromium \
+    chromium-chromedriver udev ttf-freefont dbus bash curl ca-certificates xdg-utils
+
+pip install selenium --break-system-packages
 ```
 
-в openrc init.d есть startx и kiosk
-
-# power usage
+# Power usage
 
 poweroff 0.3W  
 idle 8.5-9W  
 load 15-18W  
 
-# докер
-
-docker build -t kiosk .
-
-docker run -d --env-file .env --name kiosk -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-unix -v /home/kiosk/harddver:/app:ro --restart=unless-stopped kiosk
-
-# бот
+# Команды бота
 
 reload - Обновить страницу
 produrl - Вернуть URL на продовый
 url - Установить кастомный URL
 deploy - Передеплоить бота
 
-# разное
+# Разное, VNC
 
 ssh -L 6080:localhost:6080 kiosk
 http://localhost:6080/vnc.html?autoconnect=1&resize=scale
