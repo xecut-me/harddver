@@ -143,26 +143,22 @@ def run_webdriver():
     driver.get(DEFAULT_URL)
 
 
-def run_tgbot():
-    global application
-    
-    application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
-
-    application.add_handler(CommandHandler("reload", reload_handler))
-    application.add_handler(CommandHandler("produrl", produrl_handler))
-    application.add_handler(CommandHandler("url", url_handler))
-    application.add_handler(CommandHandler("deploy", deploy_handler))
-    application.add_handler(MessageHandler(filters.ALL, message_handler))
-
-    application.run_polling()
-
-
 admin_chat_id = -1002571293789
 no_auth_msg = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
 DEFAULT_URL = "http://127.0.0.1:8000/"
 state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
 
+
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-run_tgbot()
+
+application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
+
+application.add_handler(CommandHandler("reload", reload_handler))
+application.add_handler(CommandHandler("produrl", produrl_handler))
+application.add_handler(CommandHandler("url", url_handler))
+application.add_handler(CommandHandler("deploy", deploy_handler))
+application.add_handler(MessageHandler(filters.ALL, message_handler))
+
+application.run_polling()
