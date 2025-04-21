@@ -4,7 +4,9 @@ from selenium.webdriver.chrome.options import Options
 from secret import SECRET_TELEGRAM_API_KEY
 from selenium import webdriver
 from telegram import Update
+import signal
 import json
+import sys
 import os
 
 
@@ -64,6 +66,15 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @admin_only
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("NOT IMPLEMENTED 🚀 Бот деплоится...")
+
+
+def cleanup(signum, frame):
+    driver.quit()
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, cleanup)
+signal.signal(signal.SIGTERM, cleanup)
 
 
 application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).build()
