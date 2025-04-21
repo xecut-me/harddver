@@ -134,8 +134,8 @@ signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
 
-subprocess.run(["killall", "-9", "chrome"])
-subprocess.run(["killall", "-9", "chromedriver"])
+# subprocess.run(["killall", "-9", "chrome"])
+# subprocess.run(["killall", "-9", "chromedriver"])
 
 os.environ["DISPLAY"] = ":0"
 options = Options()
