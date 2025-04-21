@@ -144,6 +144,8 @@ def run_webdriver():
 
 
 def run_tgbot():
+    global application
+    
     application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
 
     application.add_handler(CommandHandler("reload", reload_handler))
