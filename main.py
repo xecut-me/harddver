@@ -18,20 +18,6 @@ admin_chat_id = -1002571293789
 no_auth_msg = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
 DEFAULT_URL = "http://127.0.0.1:8000/"
 
-os.environ['DISPLAY'] = ':0'
-
-options = Options()
-options.add_argument("--kiosk")
-options.add_argument("--no-first-run")
-options.add_argument("--disable-infobars")
-options.add_argument("--noerrdialogs")
-options.add_argument("--use-fake-ui-for-media-stream")
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-
-service = Service("/usr/bin/chromedriver")
-driver = webdriver.Chrome(service=service, options=options)
-driver.get(DEFAULT_URL)
-
 
 def admin_only(func):
     async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -86,7 +72,6 @@ def cleanup(signum, frame):
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-
 handler_class = functools.partial(SimpleHTTPRequestHandler, directory="./static/")
 httpd = HTTPServer(("127.0.0.1", 8000), handler_class)
 
@@ -95,6 +80,20 @@ def serve():
 
 thread = threading.Thread(target=serve, daemon=True)
 thread.start()
+
+os.environ['DISPLAY'] = ':0'
+
+options = Options()
+options.add_argument("--kiosk")
+options.add_argument("--no-first-run")
+options.add_argument("--disable-infobars")
+options.add_argument("--noerrdialogs")
+options.add_argument("--use-fake-ui-for-media-stream")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+
+service = Service("/usr/bin/chromedriver")
+driver = webdriver.Chrome(service=service, options=options)
+driver.get(DEFAULT_URL)
 
 application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).build()
 
