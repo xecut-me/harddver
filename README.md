@@ -53,3 +53,5 @@ rsync -rz --info=progress2 --delete ~/Desktop/xecut_harddver/ kiosk:/root/kiosk-
 DISPLAY=:0 /usr/bin/chromium --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream --kiosk http://192.168.1.58:8000/
 
 DISPLAY=:0 /usr/bin/chromium --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream file:///root/kiosk-website/index.html
+
+scp ~/Desktop/xecut/harddver/main.py kiosk@kiosk:/home/kiosk/harddver/main.py
