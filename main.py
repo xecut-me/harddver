@@ -91,12 +91,6 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def init(app: Application) -> None:
-    thread = threading.Thread(target=run_http_server, daemon=True)
-    thread.start()
-
-    result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
-    commit_hash = result.stdout.strip()
-    
     await application.bot.send_message(chat_id=admin_chat_id, text=f"🎉 Я запустился! Версия https://github.com/xecut-me/harddver/tree/{commit_hash}")
 
 
@@ -120,10 +114,6 @@ def run_http_server():
     httpd.serve_forever()
 
 
-
-
-
-
 admin_chat_id = -1002571293789
 no_auth_msg = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
 DEFAULT_URL = "http://127.0.0.1:8000/"
@@ -134,8 +124,16 @@ signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
 
-# subprocess.run(["killall", "-9", "chrome"])
-# subprocess.run(["killall", "-9", "chromedriver"])
+thread = threading.Thread(target=run_http_server, daemon=True)
+thread.start()
+
+
+result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+commit_hash = result.stdout.strip()
+
+
+subprocess.run(["killall", "-9", "chrome"])
+subprocess.run(["killall", "-9", "chromedriver"])
 
 os.environ["DISPLAY"] = ":0"
 options = Options()

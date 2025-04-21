@@ -51,14 +51,16 @@ rc-update add kiosk default
 
 ## VNC
 
-http://localhost:6080/vnc.html?autoconnect=1&resize=scale
+http://localhost:6080/vnc.html?autoconnect=1&resize=scale&password=123123
 
 ```bash
 ssh -L 6080:localhost:6080 kiosk
 
-/usr/bin/x11vnc -display :0 -localhost -nopw -forever -enc tight -repeat -nosel -nossl
+x0vncserver -display :0 -localhost -PasswordFile ~/.vnc/passwd
 
 ~/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen localhost:6080
+
+apk add tigervnc
 ```
 
 ## Power usage
