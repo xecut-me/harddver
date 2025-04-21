@@ -74,9 +74,12 @@ async def produrl_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
         custom_url = context.args[0]
-        driver.get(custom_url)
-        state = f"🌐🧪 Загружен тестовый URL {custom_url}"
-        await update.message.reply_text(state)
+        if custom_url.startswith("http"):
+            driver.get(custom_url)
+            state = f"🌐🧪 Загружен тестовый URL {custom_url}"
+            await update.message.reply_text(state)
+        else:
+            await update.message.reply_text("❌ URL должен начинаться с http")
     else:
         state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
         await update.message.reply_text(state)
