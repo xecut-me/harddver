@@ -91,11 +91,6 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def init(app: Application) -> None:
-    subprocess.run(["killall", "-9", "chrome"])
-    subprocess.run(["killall", "-9", "chromedriver"])
-
-    run_webdriver()
-    
     thread = threading.Thread(target=run_http_server, daemon=True)
     thread.start()
 
@@ -125,24 +120,8 @@ def run_http_server():
     httpd.serve_forever()
 
 
-def run_webdriver():
-    global driver
 
-    os.environ["DISPLAY"] = ":0"
-    options = Options()
 
-    if not is_vnc_port_taken():
-        options.add_argument("--kiosk")
-
-    options.add_argument("--no-first-run")
-    options.add_argument("--disable-infobars")
-    options.add_argument("--noerrdialogs")
-    options.add_argument("--use-fake-ui-for-media-stream")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-
-    service = Service("/usr/bin/chromedriver")
-    driver = webdriver.Chrome(service=service, options=options)
-    driver.get(DEFAULT_URL)
 
 
 admin_chat_id = -1002571293789
@@ -153,6 +132,26 @@ state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
 
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
+
+
+subprocess.run(["killall", "-9", "chrome"])
+subprocess.run(["killall", "-9", "chromedriver"])
+
+os.environ["DISPLAY"] = ":0"
+options = Options()
+
+if not is_vnc_port_taken():
+    options.add_argument("--kiosk")
+
+options.add_argument("--no-first-run")
+options.add_argument("--disable-infobars")
+options.add_argument("--noerrdialogs")
+options.add_argument("--use-fake-ui-for-media-stream")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+
+service = Service("/usr/bin/chromedriver")
+driver = webdriver.Chrome(service=service, options=options)
+driver.get(DEFAULT_URL)
 
 
 application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
