@@ -15,10 +15,16 @@ import sys
 import os
 
 
-admin_chat_id = -1002571293789
-no_auth_msg = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
-DEFAULT_URL = "http://127.0.0.1:8000/"
-state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
+class MyHTTPHandler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == "/secrets":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            data = {"BACKDOOR_AUTH": BACKDOOR_AUTH, "BACKDOOR_URL": BACKDOOR_URL}
+            self.wfile.write(json.dumps(data).encode("utf-8"))
+        else:
+            super().do_GET()
 
 
 def admin_only(func):
@@ -85,17 +91,22 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def init(app: Application) -> None:
-    result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
-    commit_hash = result.stdout.strip()
-
     subprocess.run(["killall", "-9", "chrome"])
     subprocess.run(["killall", "-9", "chromedriver"])
     
+    thread = threading.Thread(target=run_http_server, daemon=True)
+    thread.start()
+
+    result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+    commit_hash = result.stdout.strip()
+    
     await application.bot.send_message(chat_id=admin_chat_id, text=f"🎉 Я запустился! Версия https://github.com/xecut-me/harddver/tree/{commit_hash}")
+
 
 def cleanup(signum, frame):
     driver.quit()
     sys.exit(0)
+
 
 def is_vnc_port_taken(host='127.0.0.1', port=5900):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -106,55 +117,50 @@ def is_vnc_port_taken(host='127.0.0.1', port=5900):
             return True
 
 
-signal.signal(signal.SIGINT, cleanup)
-signal.signal(signal.SIGTERM, cleanup)
-
-
-class MyHandler(SimpleHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == "/secrets":
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
-            data = {"BACKDOOR_AUTH": BACKDOOR_AUTH, "BACKDOOR_URL": BACKDOOR_URL}
-            self.wfile.write(json.dumps(data).encode("utf-8"))
-        else:
-            super().do_GET()
-
-def run_server():
-    handler_class = functools.partial(MyHandler, directory="./static/")
+def run_http_server():
+    handler_class = functools.partial(MyHTTPHandler, directory="./static/")
     httpd = HTTPServer(("127.0.0.1", 8000), handler_class)
     httpd.serve_forever()
 
 
-thread = threading.Thread(target=run_server, daemon=True)
-thread.start()
+def run_webdriver():
+    global driver
+
+    os.environ["DISPLAY"] = ":0"
+    options = Options()
+
+    if not is_vnc_port_taken():
+        options.add_argument("--kiosk")
+
+    options.add_argument("--no-first-run")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--noerrdialogs")
+    options.add_argument("--use-fake-ui-for-media-stream")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+
+    service = Service("/usr/bin/chromedriver")
+    driver = webdriver.Chrome(service=service, options=options)
+    driver.get(DEFAULT_URL)
 
 
+def run_tgbot():
+    application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
 
-os.environ["DISPLAY"] = ":0"
+    application.add_handler(CommandHandler("reload", reload_handler))
+    application.add_handler(CommandHandler("produrl", produrl_handler))
+    application.add_handler(CommandHandler("url", url_handler))
+    application.add_handler(CommandHandler("deploy", deploy_handler))
+    application.add_handler(MessageHandler(filters.ALL, message_handler))
 
-options = Options()
+    application.run_polling()
 
-if not is_vnc_port_taken():
-    options.add_argument("--kiosk")
 
-options.add_argument("--no-first-run")
-options.add_argument("--disable-infobars")
-options.add_argument("--noerrdialogs")
-options.add_argument("--use-fake-ui-for-media-stream")
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
+admin_chat_id = -1002571293789
+no_auth_msg = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
+DEFAULT_URL = "http://127.0.0.1:8000/"
+state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
 
-service = Service("/usr/bin/chromedriver")
-driver = webdriver.Chrome(service=service, options=options)
-driver.get(DEFAULT_URL)
+signal.signal(signal.SIGINT, cleanup)
+signal.signal(signal.SIGTERM, cleanup)
 
-application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
-
-application.add_handler(CommandHandler("reload", reload_handler))
-application.add_handler(CommandHandler("produrl", produrl_handler))
-application.add_handler(CommandHandler("url", url_handler))
-application.add_handler(CommandHandler("deploy", deploy_handler))
-application.add_handler(MessageHandler(filters.ALL, message_handler))
-
-application.run_polling()
+run_tgbot()
