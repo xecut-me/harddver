@@ -96,3 +96,16 @@ body {
 #backdoorIndicator.hidden {
     display: none;
 }
+
+#chatWidget {
+    position: absolute;
+    width: 300px;
+    height: 500px;
+    top: 10px;
+    right: 10px;
+    background-color: darkblue;
+    color: orange;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column-reverse;
+}

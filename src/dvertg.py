@@ -61,8 +61,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_mentioned and not is_reply_to_bot:
         return
 
-    message_json = json.dumps(update.to_dict(), ensure_ascii=False)
-    response = driver.execute_script("return onMessage(arguments[0]);", message_json)
+    update_json = json.dumps(update.to_dict(), ensure_ascii=False)
+    response = driver.execute_script("return onMessage(arguments[0]);", update_json)
     
     if response:
         await update.message.reply_text(response, disable_web_page_preview=True)
