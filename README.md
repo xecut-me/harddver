@@ -18,13 +18,13 @@
 
 # Идеи
 
-чат
 все виджеты css fixed
 camera feed
 logging & catch all json.dumps(update.to_dict(), ensure_ascii=False)
 Температура 
 Co2 consumed
 Мы открыты к пулл реквестам
+сделать нормальный чат
 
 docker
 reinstall alpine
