@@ -18,7 +18,7 @@ xecut_chat_id = -1002089160630
 xecut_not_allowed = "Эта команда работает в чате хакспейса Xecut https://t.me/xecut_chat"
 
 
-def allowed_chats_only(allowed_chat_ids=(admin_chat_id), not_allowed_message=admin_not_allowed):
+def allowed_chats_only(allowed_chat_ids, not_allowed_message):
     def decorator(func):
         async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if update.message.forward_from or update.message.forward_from_chat:
@@ -33,7 +33,6 @@ def allowed_chats_only(allowed_chat_ids=(admin_chat_id), not_allowed_message=adm
     return decorator
 
 
-@allowed_chats_only((admin_chat_id, xecut_chat_id), xecut_not_allowed)
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = json.dumps(update.to_dict(), ensure_ascii=False)
 
@@ -48,20 +47,20 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(response)
 
 
-@allowed_chats_only()
+@allowed_chats_only((admin_chat_id), admin_not_allowed)
 async def reload_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.refresh()
     await update.message.reply_text("🔄 Страница перезагружена " + state)
 
 
-@allowed_chats_only()
+@allowed_chats_only((admin_chat_id), admin_not_allowed)
 async def produrl_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.get(DEFAULT_URL)
     state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
     await update.message.reply_text(state)
 
 
-@allowed_chats_only()
+@allowed_chats_only((admin_chat_id), admin_not_allowed)
 async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
         custom_url = context.args[0]
@@ -76,7 +75,7 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(state)
 
 
-@allowed_chats_only()
+@allowed_chats_only((admin_chat_id), admin_not_allowed)
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subprocess.run(["git", "pull"])
     await update.message.reply_text("🚀 git pull = ok")
@@ -87,7 +86,7 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sys.exit(0)
 
 
-@allowed_chats_only()
+@allowed_chats_only((admin_chat_id, xecut_chat_id), xecut_not_allowed)
 async def screenshot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with mss() as sct:
         screenshot = sct.grab(sct.monitors[0])
