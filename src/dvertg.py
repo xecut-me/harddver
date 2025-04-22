@@ -36,7 +36,6 @@ def allowed_chats_only(allowed_chat_ids, not_allowed_message):
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     update_json = json.dumps(update.to_dict(), ensure_ascii=False)
-
     print(update_json)
 
     if update.effective_chat.id != xecut_chat_id:
@@ -44,31 +43,11 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(err_message, disable_web_page_preview=True)
         return
     
-    message = update.message
-    bot_id = context.bot.id
+    if update.message.reply_to_message.from_user.id == context.bot.id:
+        response = driver.execute_script("return onMessage(arguments[0]);", update_json)
 
-    if not message:
-        return
-
-    is_mentioned = any(
-        entity.type == MessageEntityType.MENTION and 
-        message.text[entity.offset:entity.offset + entity.length].lower() == f"@{context.bot.username.lower()}"
-        for entity in (message.entities or [])
-    )
-
-    is_reply_to_bot = (
-        message.reply_to_message 
-        and message.reply_to_message.from_user 
-        and message.reply_to_message.from_user.id == bot_id
-    )
-
-    if not is_mentioned and not is_reply_to_bot:
-        return
-
-    response = driver.execute_script("return onMessage(arguments[0]);", update_json)
-    
-    if response:
-        await update.message.reply_text(response, disable_web_page_preview=True)
+        if response:
+            await update.message.reply_text(response, disable_web_page_preview=True)
 
 
 @allowed_chats_only((admin_chat_id,), admin_not_allowed)
