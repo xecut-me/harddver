@@ -43,21 +43,23 @@ async function getBackdoorState() {
 }
 
 function addMessage(message) {
-    document.querySelector("#chatWidget").innerText = `@${message.username}: ${message.text}\n` + document.querySelector("#chatWidget").innerText;
+    const div = document.createElement("div");
+    div.innerText = `@${message.username}: ${message.text}\n`;
+    document.querySelector("#chatWidget").appendChild(div);
 }
 
 function onMessage(updateJson) {
     const update = JSON.parse(updateJson);
 
     if (!update?.message?.text) return "Напиши текстом молю";
-    if (!update?.message?.chat?.username) return "Заведи пожалуйста юзернейм в настройках телеги";
+    if (!update?.message?.from?.username) return "Заведи пожалуйста юзернейм в настройках телеги";
 
-    const message = { username: update?.message?.chat?.username, text: update?.message?.text };
+    const message = { username: update?.message?.from?.username, text: update?.message?.text };
 
     localStorage.messages = JSON.stringify([...JSON.parse(localStorage.messages || "[]"), message])
     addMessage(message);
 
-    return "[DEBUG] Спасибо, сообщение добавлено на дверь, заходи посмотреть ;) https://maps.app.goo.gl/VPFt7zN4ayuqwcQN8";
+    return "Спасибо, сообщение добавлено на дверь, заходи посмотреть ;) https://maps.app.goo.gl/8s1x3Zzptt5A8gpc7";
 }
 
 renderTimer();

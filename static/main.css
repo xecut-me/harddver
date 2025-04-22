@@ -101,11 +101,13 @@ body {
     position: absolute;
     width: 300px;
     height: 500px;
-    top: 10px;
-    right: 10px;
+    top: 30px;
+    right: 30px;
     background-color: darkblue;
     color: orange;
     overflow: hidden;
     display: flex;
     flex-direction: column-reverse;
+    font-size: 20px;
+    justify-self: start;
 }

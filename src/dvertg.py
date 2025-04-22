@@ -35,6 +35,10 @@ def allowed_chats_only(allowed_chat_ids, not_allowed_message):
 
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    update_json = json.dumps(update.to_dict(), ensure_ascii=False)
+
+    print(update_json)
+
     if update.effective_chat.id != xecut_chat_id:
         err_message = "Чтобы вывести сообщение на харддверь тегни меня в https://t.me/xecut_chat"
         await update.message.reply_text(err_message, disable_web_page_preview=True)
@@ -52,8 +56,6 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         for entity in (message.entities or [])
     )
 
-    print(message.entities)
-
     is_reply_to_bot = (
         message.reply_to_message 
         and message.reply_to_message.from_user 
@@ -63,7 +65,6 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_mentioned and not is_reply_to_bot:
         return
 
-    update_json = json.dumps(update.to_dict(), ensure_ascii=False)
     response = driver.execute_script("return onMessage(arguments[0]);", update_json)
     
     if response:
