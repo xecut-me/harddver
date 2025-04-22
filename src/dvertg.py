@@ -43,11 +43,11 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(err_message, disable_web_page_preview=True)
         return
     
-    if update.message.reply_to_message.from_user.id == context.bot.id:
-        response = driver.execute_script("return onMessage(arguments[0]);", update_json)
+    # if update.message.reply_to_message.from_user.id == context.bot.id:
+    #     response = driver.execute_script("return onMessage(arguments[0]);", update_json)
 
-        if response:
-            await update.message.reply_text(response, disable_web_page_preview=True)
+    #     if response:
+    #         await update.message.reply_text(response, disable_web_page_preview=True)
 
 
 @allowed_chats_only((admin_chat_id,), admin_not_allowed)
