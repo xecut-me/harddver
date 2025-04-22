@@ -19,9 +19,11 @@ xecut_chat_id = -1002089160630
 xecut_not_allowed = "Эта команда работает в чате хакспейса Xecut https://t.me/xecut_chat"
 
 
-def allowed_chats_only(allowed_chat_ids, not_allowed_message):
+def allowed_chats_only(allowed_chat_ids=(admin_chat_id,), not_allowed_message=admin_not_allowed):
     def decorator(func):
         async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
+            print(json.dumps(update.to_dict(), ensure_ascii=False))
+
             if update.message.forward_from or update.message.forward_from_chat:
                 return
             
@@ -34,29 +36,13 @@ def allowed_chats_only(allowed_chat_ids, not_allowed_message):
     return decorator
 
 
-async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    update_json = json.dumps(update.to_dict(), ensure_ascii=False)
-    print(update_json)
-
-    if update.effective_chat.id != xecut_chat_id:
-        err_message = "Чтобы вывести сообщение на харддверь тегни меня в https://t.me/xecut_chat"
-        await update.message.reply_text(err_message, disable_web_page_preview=True)
-        return
-    
-    # if update.message.reply_to_message.from_user.id == context.bot.id:
-    #     response = driver.execute_script("return onMessage(arguments[0]);", update_json)
-
-    #     if response:
-    #         await update.message.reply_text(response, disable_web_page_preview=True)
-
-
-@allowed_chats_only((admin_chat_id,), admin_not_allowed)
+@allowed_chats_only()
 async def reload_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.refresh()
     await update.message.reply_text("🔄 Страница перезагружена " + state, disable_web_page_preview=True)
 
 
-@allowed_chats_only((admin_chat_id,), admin_not_allowed)
+@allowed_chats_only()
 async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args and not context.args[0].startswith("http"):
         await update.message.reply_text("❌ URL должен начинаться с http")
@@ -73,7 +59,7 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(state, disable_web_page_preview=True)
 
 
-@allowed_chats_only((admin_chat_id,), admin_not_allowed)
+@allowed_chats_only()
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subprocess.run(["git", "pull"])
     await update.message.reply_text("🚀 git pull = ok")
@@ -98,6 +84,19 @@ async def screenshot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.message.reply_photo(photo=buffer)
 
 
+@allowed_chats_only((admin_chat_id, xecut_chat_id), xecut_not_allowed)
+async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = " ".join(context.args)
+
+    await update.message.reply_text(text, disable_web_page_preview=True)
+
+    # update_json = json.dumps(update.to_dict(), ensure_ascii=False)
+    # response = driver.execute_script("return onMessage(arguments[0]);", update_json)
+
+    # if response:
+    #     await update.message.reply_text(response, disable_web_page_preview=True)
+
+
 async def init(app: Application) -> None:
     result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
     commit_hash = result.stdout.strip()
@@ -112,13 +111,12 @@ def start_bot(_driver):
 
     application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
 
-    application.add_handler(CommandHandler("reload", reload_handler))
-    application.add_handler(CommandHandler("produrl", url_handler))
-    application.add_handler(CommandHandler("url", url_handler))
-    application.add_handler(CommandHandler("deploy", deploy_handler))
+    application.add_handler(CommandHandler("display", display_handler))
     application.add_handler(CommandHandler("screenshot", screenshot_handler))
-    application.add_handler(MessageHandler(filters.ALL, message_handler))
-
+    application.add_handler(CommandHandler("deploy", deploy_handler))
+    application.add_handler(CommandHandler("url", url_handler))
+    application.add_handler(CommandHandler("reload", reload_handler))
+    
     application.run_polling()
 
 
