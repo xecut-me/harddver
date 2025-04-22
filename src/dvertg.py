@@ -95,7 +95,7 @@ async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     
     message = {"username": update.message.from_user.username, "text": " ".join(update.message.text.split(" ")[1:])}
-    message_json = json.dumps(message.to_dict(), ensure_ascii=False)
+    message_json = json.dumps(message, ensure_ascii=False)
 
     chat_log.write(message_json + "\n")
     chat_log.flush()
