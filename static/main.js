@@ -42,24 +42,12 @@ async function getBackdoorState() {
         .forEach(e => e.style.filter = backdoorState === "on" ? "invert(100%)" : "");
 }
 
-function addMessage(message) {
+function addMessage(messageJson) {
+    const message = JSON.parse(messageJson);
+
     const div = document.createElement("div");
     div.innerText = `@${message.username}: ${message.text}\n`;
     document.querySelector("#chatWidget").appendChild(div);
-}
-
-function onMessage(updateJson) {
-    const update = JSON.parse(updateJson);
-
-    if (!update?.message?.text) return "Напиши текстом молю";
-    if (!update?.message?.from?.username) return "Заведи пожалуйста юзернейм в настройках телеги";
-
-    const message = { username: update?.message?.from?.username, text: update?.message?.text };
-
-    localStorage.messages = JSON.stringify([...JSON.parse(localStorage.messages || "[]"), message])
-    addMessage(message);
-
-    return "Спасибо, сообщение добавлено на дверь, заходи посмотреть ;) https://maps.app.goo.gl/8s1x3Zzptt5A8gpc7";
 }
 
 renderTimer();
@@ -67,5 +55,3 @@ startCamera();
 
 setInterval(getBackdoorState, 10000);
 getBackdoorState();
-
-JSON.parse(localStorage.messages || "[]").forEach(addMessage);

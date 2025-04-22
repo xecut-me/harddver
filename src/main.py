@@ -15,6 +15,10 @@ threading.Thread(target=run_http_server, daemon=True).start()
 
 driver = start_chrome()
 
+with open("./chat.json.log", "r") as file:
+    for line in file:
+        driver.execute_script("return addMessage(arguments[0]);", line)
+
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 

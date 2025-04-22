@@ -93,17 +93,17 @@ async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.from_user.username:
         await update.message.reply_text("Заведи пожалуйста юзернейм в настройках телеги")
         return
+    
+    message = {"username": update.message.from_user.username, "text": " ".join(update.message.text.split(" ")[1:])}
+    message_json = json.dumps(message.to_dict(), ensure_ascii=False)
 
-    text = " ".join(update.message.text.split(" ")[1:])
-    username = update.message.from_user.username
+    chat_log.write(message_json + "\n")
+    chat_log.flush()
+    
+    driver.execute_script("return addMessage(arguments[0]);", message_json)
 
-    await update.message.reply_text(f"@{username}: {text}", disable_web_page_preview=True)
-
-    # update_json = json.dumps(update.to_dict(), ensure_ascii=False)
-    # response = driver.execute_script("return onMessage(arguments[0]);", update_json)
-
-    # if response:
-    #     await update.message.reply_text(response, disable_web_page_preview=True)
+    text = "Спасибо, сообщение добавлено на дверь, заходи посмотреть ;) https://maps.app.goo.gl/8s1x3Zzptt5A8gpc7"
+    await update.message.reply_text(text, disable_web_page_preview=True)
 
 
 async def init(app: Application) -> None:
@@ -115,8 +115,10 @@ async def init(app: Application) -> None:
 
 
 def start_bot(_driver):
-    global driver
+    global driver, chat_log
     driver = _driver
+
+    chat_log = open("./chat.json.log", "a")
 
     application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
 
@@ -131,3 +133,4 @@ def start_bot(_driver):
 
 state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
 driver = None
+chat_log = None
