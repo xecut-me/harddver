@@ -86,9 +86,18 @@ async def screenshot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 @allowed_chats_only((admin_chat_id, xecut_chat_id), xecut_not_allowed)
 async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = " ".join(context.args)
+    if not update.message.text:
+        await update.message.reply_text("Напиши текстом молю")
+        return
+    
+    if not update.message.from_user.username:
+        await update.message.reply_text("Заведи пожалуйста юзернейм в настройках телеги")
+        return
 
-    await update.message.reply_text(text, disable_web_page_preview=True)
+    text = " ".join(update.message.text.split(" ")[1:])
+    username = update.message.from_user.username
+
+    await update.message.reply_text(f"@{username}: {text}", disable_web_page_preview=True)
 
     # update_json = json.dumps(update.to_dict(), ensure_ascii=False)
     # response = driver.execute_script("return onMessage(arguments[0]);", update_json)
