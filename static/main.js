@@ -43,7 +43,7 @@ async function getBackdoorState() {
 }
 
 function addMessage(message) {
-    querySelector("#chatWidget").innerText = `@${message.username}: ${message.text}\n` + querySelector("#chatWidget").innerText;
+    document.querySelector("#chatWidget").innerText = `@${message.username}: ${message.text}\n` + querySelector("#chatWidget").innerText;
 }
 
 function onMessage(updateJson) {
