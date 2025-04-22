@@ -43,7 +43,7 @@ async function getBackdoorState() {
 }
 
 function onMessage(message) {
-    return "Привет! " + message.slice(0, 10);
+    return "[DEBUG] Спасибо, сообщение добавлено на дверь, заходи посмотреть ;) https://maps.app.goo.gl/VPFt7zN4ayuqwcQN8";
 }
 
 renderTimer();

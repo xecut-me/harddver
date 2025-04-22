@@ -1,4 +1,5 @@
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
+from telegram.constants import MessageEntityType
 from secret import SECRET_TELEGRAM_API_KEY
 from dverchrome import DEFAULT_URL
 from telegram import Update
@@ -34,45 +35,60 @@ def allowed_chats_only(allowed_chat_ids, not_allowed_message):
 
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    message = json.dumps(update.to_dict(), ensure_ascii=False)
-
-    try:
-        response = driver.execute_script("return onMessage(arguments[0]);", message)
-    except Exception as e:
+    if update.effective_chat.id != xecut_chat_id:
+        err_message = "Чтобы вывести сообщение на харддверь тегни меня в https://t.me/xecut_chat"
+        await update.message.reply_text(err_message, disable_web_page_preview=True)
+        return
     
-        print(f"JS error: {e}")
-        response = None
+    message = update.message
+    bot_id = context.bot.id
+
+    if not message:
+        return
+
+    is_mentioned = any(
+        entity.type == MessageEntityType.MENTION and 
+        message.text[entity.offset:entity.offset + entity.length].lower() == f"@{context.bot.username.lower()}"
+        for entity in (message.entities or [])
+    )
+
+    is_reply_to_bot = (
+        message.reply_to_message 
+        and message.reply_to_message.from_user 
+        and message.reply_to_message.from_user.id == bot_id
+    )
+
+    if not is_mentioned and not is_reply_to_bot:
+        return
+
+    message_json = json.dumps(update.to_dict(), ensure_ascii=False)
+    response = driver.execute_script("return onMessage(arguments[0]);", message_json)
     
     if response:
-        await update.message.reply_text(response)
+        await update.message.reply_text(response, disable_web_page_preview=True)
 
 
 @allowed_chats_only((admin_chat_id,), admin_not_allowed)
 async def reload_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.refresh()
-    await update.message.reply_text("🔄 Страница перезагружена " + state)
-
-
-@allowed_chats_only((admin_chat_id,), admin_not_allowed)
-async def produrl_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    driver.get(DEFAULT_URL)
-    state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
-    await update.message.reply_text(state)
+    await update.message.reply_text("🔄 Страница перезагружена " + state, disable_web_page_preview=True)
 
 
 @allowed_chats_only((admin_chat_id,), admin_not_allowed)
 async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if context.args and not context.args[0].startswith("http"):
+        await update.message.reply_text("❌ URL должен начинаться с http")
+        return
+    
     if context.args:
-        custom_url = context.args[0]
-        if custom_url.startswith("http"):
-            driver.get(custom_url)
-            state = f"🌐🧪 Загружен тестовый URL {custom_url}"
-            await update.message.reply_text(state)
-        else:
-            await update.message.reply_text("❌ URL должен начинаться с http")
+        url = context.args[0]
+        state = f"🌐🧪 Загружен тестовый URL {url}"
     else:
-        state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
-        await update.message.reply_text(state)
+        url = DEFAULT_URL
+        state = f"🌐🔒 Загружен продовый URL {url}"
+    
+    driver.get(url)
+    await update.message.reply_text(state, disable_web_page_preview=True)
 
 
 @allowed_chats_only((admin_chat_id,), admin_not_allowed)
@@ -105,7 +121,7 @@ async def init(app: Application) -> None:
     commit_hash = result.stdout.strip()
 
     text = f"🎉 Я запустился! Версия https://github.com/xecut-me/harddver/tree/{commit_hash}"
-    await app.bot.send_message(chat_id=admin_chat_id, text=text)
+    await app.bot.send_message(chat_id=admin_chat_id, text=text, disable_web_page_preview=True)
 
 
 def start_bot(_driver):
@@ -115,7 +131,7 @@ def start_bot(_driver):
     application: Application = Application.builder().token(SECRET_TELEGRAM_API_KEY).post_init(init).build()
 
     application.add_handler(CommandHandler("reload", reload_handler))
-    application.add_handler(CommandHandler("produrl", produrl_handler))
+    application.add_handler(CommandHandler("produrl", url_handler))
     application.add_handler(CommandHandler("url", url_handler))
     application.add_handler(CommandHandler("deploy", deploy_handler))
     application.add_handler(CommandHandler("screenshot", screenshot_handler))
