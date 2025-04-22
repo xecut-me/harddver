@@ -52,6 +52,8 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         for entity in (message.entities or [])
     )
 
+    print(message.entities)
+
     is_reply_to_bot = (
         message.reply_to_message 
         and message.reply_to_message.from_user 

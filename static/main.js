@@ -49,10 +49,10 @@ function addMessage(message) {
 function onMessage(updateJson) {
     const update = JSON.parse(updateJson);
 
-    if (!update.text) return "Напиши текстом молю";
-    if (!update.chat.username) return "Заведи пожалуйста юзернейм в настройках телеги";
+    if (!update?.message?.text) return "Напиши текстом молю";
+    if (!update?.message?.chat?.username) return "Заведи пожалуйста юзернейм в настройках телеги";
 
-    const message = { username: update.chat.username, text: update.text };
+    const message = { username: update?.message?.chat?.username, text: update?.message?.text };
 
     localStorage.messages = JSON.stringify([...JSON.parse(localStorage.messages || "[]"), message])
     addMessage(message);
