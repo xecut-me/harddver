@@ -37,6 +37,9 @@ async function getBackdoorState() {
     if (backdoorState === "on") {
         backdoorIndicator.classList.remove(hiddenClass)
     }
+
+    [...document.querySelectorAll(".container")]
+        .forEach(e => e.style.filter = backdoorState === "on" ? "invert(100%)" : "");
 }
 
 function onMessage(message) {
