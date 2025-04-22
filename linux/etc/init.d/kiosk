@@ -2,7 +2,7 @@
 
 name="kiosk"
 command="/usr/bin/python3"
-command_args="main.py"
+command_args="./src/main.py"
 command_background=true
 pidfile="/run/kiosk.pid"
 command_user="kiosk:kiosk"

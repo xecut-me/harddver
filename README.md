@@ -10,13 +10,13 @@
 <img src="./docs/pano.jpg"></img><br/>
 <img src="./docs/back.jpg"></img><br/>
 
-# Разработчику
+# Архитектура
 
 Телеграм ботик, он же http сервер, он же chromium с selenium для управления это main.py.  
 
 Статический сайт расположен в ./static  
 
-## Админские команды @harddver_bot
+# Админские команды @harddver_bot
 
 reload - Обновить страницу
 produrl - Вернуть URL на продовый
@@ -24,9 +24,15 @@ url - Установить кастомный URL
 deploy - Передеплоить бота
 screenshot - Сделать скриншот
 
-# Владельцу
+# Добавление секретов
 
-## Как налить все с нуля
+```bash
+ssh kiosk
+su kiosk
+vim ~/harddver/secret.py
+```
+
+# Как налить все с нуля
 
 1. Установить https://alpinelinux.org  
 
@@ -41,7 +47,7 @@ pip install -r requirements.txt --break-system-packages
 
 3. Настроить иксы, профиль и openrc файлы, см папку linux
 
-## Дебаг хрома
+# Дебаг хрома
 
 <img src="./docs/debug.png"></img>
 
@@ -51,7 +57,7 @@ ssh -L 9222:localhost:9222 kiosk
 
 chrome://inspect/#devices
 
-## Управление openrc сервисом
+# Управление openrc сервисом
 
 ```bash
 rc-service kiosk stop
@@ -60,7 +66,7 @@ rc-update del kiosk
 rc-update add kiosk default
 ```
 
-## VNC
+# VNC
 
 http://localhost:6080/vnc.html?autoconnect=1&resize=scale&password=123123
 
@@ -74,13 +80,13 @@ x0vncserver -display :0 -localhost -PasswordFile ~/.vnc/passwd
 apk add tigervnc
 ```
 
-## Power usage
+# Power usage
 
 poweroff 0.3W  
 idle 8.5-9W  
 under full load 15-18W  
 
-## Как тестить ботика без гитхаба
+# Как тестить ботика без гитхаба
 
 ```bash
 scp ~/Desktop/xecut/harddver/main.py kiosk@kiosk:/home/kiosk/harddver/main.py
