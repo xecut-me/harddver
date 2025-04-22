@@ -38,7 +38,7 @@ async function getBackdoorState() {
         backdoorIndicator.classList.remove(hiddenClass)
     }
 
-    [...document.querySelectorAll(".container")]
+    [...document.querySelectorAll(".item")]
         .forEach(e => e.style.filter = backdoorState === "on" ? "invert(100%)" : "");
 }
 
