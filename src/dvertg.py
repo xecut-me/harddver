@@ -11,19 +11,29 @@ import json
 import sys
 
 
-def admin_only(func):
-    async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
-        if update.message.forward_from or update.message.forward_from_chat:
-            return
-        
-        if update.effective_chat.id != admin_chat_id:
-            await update.message.reply_text(no_auth_msg)
-            return
-        
-        await func(update, context)
-    return wrapper
+admin_chat_id = -1002571293789
+admin_not_allowed = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
+
+xecut_chat_id = -1002089160630
+xecut_not_allowed = "Эта команда работает в чате хакспейса Xecut https://t.me/xecut_chat"
 
 
+def allowed_chats_only(allowed_chat_ids=(admin_chat_id), not_allowed_message=admin_not_allowed):
+    def decorator(func):
+        async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
+            if update.message.forward_from or update.message.forward_from_chat:
+                return
+            
+            if update.effective_chat.id not in allowed_chat_ids:
+                await update.message.reply_text(not_allowed_message)
+                return
+
+            await func(update, context)
+        return wrapper
+    return decorator
+
+
+@allowed_chats_only((admin_chat_id, xecut_chat_id), xecut_not_allowed)
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = json.dumps(update.to_dict(), ensure_ascii=False)
 
@@ -38,20 +48,20 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(response)
 
 
-@admin_only
+@allowed_chats_only()
 async def reload_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.refresh()
     await update.message.reply_text("🔄 Страница перезагружена " + state)
 
 
-@admin_only
+@allowed_chats_only()
 async def produrl_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.get(DEFAULT_URL)
     state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
     await update.message.reply_text(state)
 
 
-@admin_only
+@allowed_chats_only()
 async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
         custom_url = context.args[0]
@@ -66,7 +76,7 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(state)
 
 
-@admin_only
+@allowed_chats_only()
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subprocess.run(["git", "pull"])
     await update.message.reply_text("🚀 git pull = ok")
@@ -77,7 +87,7 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sys.exit(0)
 
 
-@admin_only
+@allowed_chats_only()
 async def screenshot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with mss() as sct:
         screenshot = sct.grab(sct.monitors[0])
@@ -95,7 +105,8 @@ async def init(app: Application) -> None:
     result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
     commit_hash = result.stdout.strip()
 
-    await app.bot.send_message(chat_id=admin_chat_id, text=f"🎉 Я запустился! Версия https://github.com/xecut-me/harddver/tree/{commit_hash}")
+    text = f"🎉 Я запустился! Версия https://github.com/xecut-me/harddver/tree/{commit_hash}"
+    await app.bot.send_message(chat_id=admin_chat_id, text=text)
 
 
 def start_bot(_driver):
@@ -114,8 +125,5 @@ def start_bot(_driver):
     application.run_polling()
 
 
-admin_chat_id = -1002571293789
-no_auth_msg = "Это админская команда, работает только в чате https://t.me/+IBkZEqKkqRlhNGQy"
 state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
-
 driver = None

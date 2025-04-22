@@ -6,7 +6,7 @@ import socket
 import os
 
 
-def is_vnc_port_taken(host='127.0.0.1', port=5900):
+def is_vnc_port_taken(host="127.0.0.1", port=5900):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
             s.bind((host, port))
