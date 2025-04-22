@@ -47,20 +47,20 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(response)
 
 
-@allowed_chats_only((admin_chat_id), admin_not_allowed)
+@allowed_chats_only((admin_chat_id,), admin_not_allowed)
 async def reload_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.refresh()
     await update.message.reply_text("🔄 Страница перезагружена " + state)
 
 
-@allowed_chats_only((admin_chat_id), admin_not_allowed)
+@allowed_chats_only((admin_chat_id,), admin_not_allowed)
 async def produrl_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     driver.get(DEFAULT_URL)
     state = f"🌐🔒 Загружен продовый URL {DEFAULT_URL}"
     await update.message.reply_text(state)
 
 
-@allowed_chats_only((admin_chat_id), admin_not_allowed)
+@allowed_chats_only((admin_chat_id,), admin_not_allowed)
 async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
         custom_url = context.args[0]
@@ -75,7 +75,7 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(state)
 
 
-@allowed_chats_only((admin_chat_id), admin_not_allowed)
+@allowed_chats_only((admin_chat_id,), admin_not_allowed)
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     subprocess.run(["git", "pull"])
     await update.message.reply_text("🚀 git pull = ok")
