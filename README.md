@@ -16,6 +16,21 @@
 
 Статический сайт расположен в ./static  
 
+# Идеи
+
+чат
+все виджеты css fixed
+camera feed
+logging & catch all
+Температура 
+Co2 consumed
+Мы открыты к пулл реквестам
+
+docker
+reinstall alpine
+приклеить радиатор
+Залить маслом
+
 # Админские команды @harddver_bot
 
 reload - Обновить страницу
