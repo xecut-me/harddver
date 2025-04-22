@@ -36,7 +36,7 @@ screenshot - Сделать скриншот
 apk add --no-cache xorg-server xf86-video-intel xf86-input-evdev xinit chromium openbox chromium \
     chromium-chromedriver udev ttf-freefont dbus bash curl ca-certificates xdg-utils
 
-pip install selenium==4.31.0 python-telegram-bot==20.5 mss==10.0.0 --break-system-packages
+pip install -r requirements.txt --break-system-packages
 ```
 
 3. Настроить иксы, профиль и openrc файлы, см папку linux

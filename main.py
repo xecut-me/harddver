@@ -5,6 +5,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from telegram import Update
+from io import BytesIO
+from PIL import Image
+from time import time
 from mss import mss
 import subprocess
 import functools
@@ -99,11 +102,15 @@ async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @admin_only
 async def screenshot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with mss() as sct:
-        screenshot_path = "./screenshot.png"
-        sct.shot(output=screenshot_path)
+        screenshot = sct.grab(sct.monitors[0])
 
-    with open(screenshot_path, 'rb') as f:
-        await update.message.reply_photo(photo=f)
+    img = Image.frombytes("RGB", (screenshot.width, screenshot.height), screenshot.rgb)
+    buffer = BytesIO()
+    buffer.name = f"screenshot.png{time()}"
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    await update.message.reply_photo(photo=buffer)
 
 
 async def init(app: Application) -> None:
