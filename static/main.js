@@ -1,7 +1,7 @@
 const digits = [...document.querySelectorAll(".clock-digit")];
 const positions = [8, 9, 5, 6, 0, 1, 2, 3, 11, 12, 14, 15, 17, 18, 20, 21, 22];
 const offset = new Date().getTimezoneOffset() * 60000;
-let lastTime = "";
+let lastTime = "", recorder;
 
 function renderTimer() {
     const time = new Date(Date.now() - offset).toISOString();
@@ -22,6 +22,31 @@ async function startCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     const videoElement = document.querySelector(".camera");
     videoElement.srcObject = stream;
+
+    let recordedChunks = [];
+
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+
+    recorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: "video/webm" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        const now = new Date();
+        const filename = now.toISOString().replace(/[:T]/g, "-").split(".")[0] + ".webm";
+
+        a.style.display = "none";
+        a.href = url;
+        a.download = filename;
+
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        URL.revokeObjectURL(url);
+    };
+
 }
 
 async function getBackdoorState() {
@@ -56,13 +81,5 @@ startCamera();
 setInterval(getBackdoorState, 10000);
 getBackdoorState();
 
-const text = "test";
-const blob = new Blob([text], { type: "text/plain" });
-const url = URL.createObjectURL(blob);
-const a = document.createElement("a");
-a.style.display = "none";
-a.href = url;
-a.download = "example.txt";
-document.body.appendChild(a);
-a.click();
-URL.revokeObjectURL(url);
+setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
+recorder.start();
