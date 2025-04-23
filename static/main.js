@@ -90,10 +90,17 @@ function addMessage(messageJson) {
 }
 
 renderTimer();
-startCamera();
 
-setInterval(getBackdoorState, 10000);
-getBackdoorState();
+if (location.href.includes("debug")) {
+    document.querySelector(".widget-backdoor").classList.remove("hidden");
 
-setInterval(getTemperatureAndCO2, 10000);
-getTemperatureAndCO2();
+    [...document.querySelectorAll(".widget")].forEach(e => e.style.border = "5px white solid");
+} else {
+    startCamera();
+
+    setInterval(getBackdoorState, 10000);
+    getBackdoorState();
+
+    setInterval(getTemperatureAndCO2, 10000);
+    getTemperatureAndCO2();
+}
