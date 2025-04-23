@@ -99,10 +99,12 @@ body {
 
 .widget-chat {
     position: absolute;
-    background-color: darkblue;
-    color: orange;
+    background-color: #333;
+    color: white;
     overflow: hidden;
-    font-size: 20px;
+    font-size: 24px;
+    word-wrap: break-word;
+    overflow: scroll;
 }
 
 .widget-pull-request {

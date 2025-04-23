@@ -86,7 +86,10 @@ function addMessage(messageJson) {
 
     const div = document.createElement("div");
     div.innerText = `@${message.username}: ${message.text}\n`;
-    document.querySelector(".widget-chat").appendChild(div);
+
+    const widgetChat = document.querySelector(".widget-chat");
+    widgetChat.appendChild(div);
+    widgetChat.scrollTop = widgetChat.scrollHeight;
 }
 
 renderTimer();
