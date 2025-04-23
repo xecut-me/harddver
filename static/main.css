@@ -101,10 +101,10 @@ body {
     position: absolute;
     background-color: #333;
     color: white;
-    overflow: hidden;
+    overflow-x: hidden;
     font-size: 24px;
     word-wrap: break-word;
-    overflow: scroll;
+    overflow-y: auto;
 }
 
 .widget-pull-request {
