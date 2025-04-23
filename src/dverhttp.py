@@ -1,5 +1,6 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from secret import BACKDOOR_AUTH, BACKDOOR_URL
+from dverco2 import get_co2_emitted
 import subprocess
 import functools
 import requests
@@ -29,6 +30,12 @@ class MyHTTPHandler(SimpleHTTPRequestHandler):
                 text_result = exp.group()
 
             self.wfile.write(text_result.encode("utf-8"))
+        elif self.path == "/co2":
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain")
+            self.end_headers()
+
+            self.wfile.write(get_co2_emitted().encode("utf-8"))
         else:
             super().do_GET()
 

@@ -1,0 +1,7 @@
+#!/sbin/openrc-run
+
+name="powerlogger"
+command="/bin/sh"
+command_args="-c 'while true; do cat /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj >> /home/kiosk/logs/power.log; echo >> /home/kiosk/logs/power.log; sleep 60; done'"
+command_background=true
+pidfile="/run/powerlogger.pid"

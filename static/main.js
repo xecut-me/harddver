@@ -69,11 +69,16 @@ async function getBackdoorState() {
         .forEach(e => e.style.filter = backdoorState === "on" ? "invert(100%)" : "");
 }
 
-async function getTemperature() {
-    const state = await fetch("./temp")
+async function getTemperatureAndCO2() {
+    const temp = await fetch("./temp")
         .then(res => res.text());
 
-    document.querySelector(".widget-temperature").innerText = state;
+    document.querySelector(".widget-temperature").innerText = temp;
+
+    const co2 = await fetch("./co2")
+        .then(res => res.text());
+
+    document.querySelector(".widget-co2").innerText = co2;
 }
 
 function addMessage(messageJson) {
@@ -90,5 +95,5 @@ startCamera();
 setInterval(getBackdoorState, 10000);
 getBackdoorState();
 
-setInterval(getTemperature, 10000);
-getTemperature();
+setInterval(getTemperatureAndCO2, 10000);
+getTemperatureAndCO2();
