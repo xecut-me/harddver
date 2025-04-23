@@ -40,6 +40,9 @@ body {
 .widget {
     position: absolute;
     overflow: hidden;
+
+    /* раскомментить для дебага */
+    /* border: 5px white solid; */
 }
 
 .widget-caption {
@@ -107,4 +110,9 @@ body {
     font-size: 80px;
     text-decoration: underline;
     text-align: center;
+}
+
+.widget-temperature {
+    color: green;
+    font-size: 70px;
 }

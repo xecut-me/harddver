@@ -67,6 +67,13 @@ async function getBackdoorState() {
         .forEach(e => e.style.filter = backdoorState === "on" ? "invert(100%)" : "");
 }
 
+async function getTemperature() {
+    const state = await fetch("./temp")
+        .then(res => res.text());
+
+    document.querySelector(".widget-temperature").innerText = state;
+}
+
 function addMessage(messageJson) {
     const message = JSON.parse(messageJson);
 
@@ -83,3 +90,6 @@ getBackdoorState();
 
 setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
 recorder.start();
+
+setInterval(getTemperature, 10000);
+getTemperature();
