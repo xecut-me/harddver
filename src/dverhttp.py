@@ -28,7 +28,7 @@ class MyHTTPHandler(SimpleHTTPRequestHandler):
             if exp:
                 text_result = exp.group()
 
-            self.wfile.write(text_result)
+            self.wfile.write(text_result.encode("utf-8"))
         else:
             super().do_GET()
 
