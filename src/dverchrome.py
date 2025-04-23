@@ -31,6 +31,12 @@ def start_chrome():
     options.add_argument("--noerrdialogs")
     options.add_argument("--use-fake-ui-for-media-stream")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    
+    options.add_experimental_option("prefs", {
+        "download.default_directory": "/home/kiosk/video",
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True
+    })
 
     service = Service("/usr/bin/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)

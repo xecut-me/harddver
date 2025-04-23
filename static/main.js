@@ -55,3 +55,14 @@ startCamera();
 
 setInterval(getBackdoorState, 10000);
 getBackdoorState();
+
+const text = "test";
+const blob = new Blob([text], { type: "text/plain" });
+const url = URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.style.display = "none";
+a.href = url;
+a.download = "example.txt";
+document.body.appendChild(a);
+a.click();
+URL.revokeObjectURL(url);
