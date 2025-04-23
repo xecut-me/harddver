@@ -47,6 +47,8 @@ async function startCamera() {
         URL.revokeObjectURL(url);
     };
 
+    setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
+    recorder.start();
 }
 
 async function getBackdoorState() {
@@ -87,9 +89,6 @@ startCamera();
 
 setInterval(getBackdoorState, 10000);
 getBackdoorState();
-
-setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
-recorder.start();
 
 setInterval(getTemperature, 10000);
 getTemperature();
