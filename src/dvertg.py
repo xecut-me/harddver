@@ -1,5 +1,4 @@
-from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
-from telegram.constants import MessageEntityType
+from telegram.ext import Application, CommandHandler, TypeHandler, ContextTypes
 from secret import SECRET_TELEGRAM_API_KEY
 from dverchrome import DEFAULT_URL
 from telegram import Update
@@ -106,6 +105,10 @@ async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(text, disable_web_page_preview=True)
 
 
+async def just_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(json.dumps(update.to_dict(), ensure_ascii=False))
+
+
 async def init(app: Application) -> None:
     result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
     commit_hash = result.stdout.strip()
@@ -127,6 +130,7 @@ def start_bot(_driver):
     application.add_handler(CommandHandler("deploy", deploy_handler))
     application.add_handler(CommandHandler("url", url_handler))
     application.add_handler(CommandHandler("reload", reload_handler))
+    application.add_handler(TypeHandler(Update, just_log))
     
     application.run_polling()
 

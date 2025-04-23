@@ -18,7 +18,6 @@
 
 # Идеи
 
-camera feed
 logging & catch all json.dumps(update.to_dict(), ensure_ascii=False)
 Температура 
 Co2 consumed
@@ -28,6 +27,7 @@ Co2 consumed
 dvd logo
 git pull показывает было ли обновление
 feed backup
+подчищать за собой feed
 
 docker
 reinstall alpine

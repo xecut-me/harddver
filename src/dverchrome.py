@@ -35,7 +35,8 @@ def start_chrome():
     options.add_experimental_option("prefs", {
         "download.default_directory": "/home/kiosk/video",
         "download.prompt_for_download": False,
-        "download.directory_upgrade": True
+        "download.directory_upgrade": True,
+        "profile.default_content_setting_values.automatic_downloads": 1
     })
 
     service = Service("/usr/bin/chromedriver")
