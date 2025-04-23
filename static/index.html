@@ -9,51 +9,63 @@
 </head>
 
 <body>
-    <div class="text">
-        &nbsp;&nbsp;&nbsp;xecut<br>
-        (under<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;construction)
-    </div>
-    <div class="container">
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-    </div>
-    <div class="container">
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-        <div class="item digit"></div>
-    </div>
-    <div class="pr"><span id="version"></span> Присылайте пулл реквесты в <span
-            class="underline">https://github.com/xecut-me/harddver</span></div>
-    <div class="imgs">
-        <span><img src="./img/snowflake.jpg" class="img"></img></span>
-        <span><img src="./img/xecut_tg.jpg" class="img"></img></span>
-        <span><img src="./img/xecut.png" class="img"></img></span>
-        <span><video id="camera" autoplay playsinline></video></span>
-    </div>
+    <div class="screen">
+        <!-- top/bottom, left/right и width, height пожалуйста задавайте в html, чтобы было видно что где -->
 
-    <div id="backdoorIndicator" class="hidden">
-        PWNED
-    </div>
+        <div class="widget widget-caption" style="top: 30px; left:570px; width: 760px; height: 250px;">
+            &nbsp;&nbsp;&nbsp;xecut<br>
+            (under<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;construction)
+        </div>
 
-    <div id="chatWidget" class="widget"></div>
+        <div class="widget widget-clock" style="top: 300px; left:570px; width: 900px; height: 310px;">
+            <div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+            </div>
+            <div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+                <div class="clock-item clock-digit"></div>
+            </div>
+        </div>
+
+        <div class="widget widget-images" style="top: 630px; left:120px; width: 1700px; height: 400px;">
+            <img src="./img/snowflake.jpg" class="image"></img>
+            <img src="./img/xecut_tg.jpg" class="image"></img>
+            <img src="./img/xecut.png" class="image"></img>
+            <video class="camera" autoplay playsinline></video>
+        </div>
+
+        <div class="widget widget-backdoor hidden" style="top: 500px; left:300px; width: 60px; height: 20px;">
+            PWNED
+        </div>
+
+        <div class="widget widget-chat" style="top: 30px; left:1550px; width: 300px; height: 500px;"></div>
+
+        <div class="widget widget-pull-request" style="top: 30px; left:10px; width: 400px; height: 300px;">
+            github.com<br />
+            /xecut-me<br />
+            /harddver
+        </div>
+    </div>
 
     <script src="./main.js"></script>
 </body>

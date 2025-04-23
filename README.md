@@ -25,11 +25,14 @@ logging & catch all json.dumps(update.to_dict(), ensure_ascii=False)
 Co2 consumed
 Мы открыты к пулл реквестам
 сделать нормальный чат
+индикация кто пришел
+dvd logo
 
 docker
 reinstall alpine
 приклеить радиатор
 Залить маслом
+повесить ногу еспшки на кнопку включения
 
 # Админские команды @harddver_bot
 

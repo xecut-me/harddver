@@ -1,4 +1,4 @@
-const digits = [...document.querySelectorAll(".digit")];
+const digits = [...document.querySelectorAll(".clock-digit")];
 const positions = [8, 9, 5, 6, 0, 1, 2, 3, 11, 12, 14, 15, 17, 18, 20, 21, 22];
 const offset = new Date().getTimezoneOffset() * 60000;
 let lastTime = "";
@@ -20,7 +20,7 @@ function renderTimer() {
 
 async function startCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    const videoElement = document.getElementById("camera");
+    const videoElement = document.querySelector(".camera");
     videoElement.srcObject = stream;
 }
 
@@ -30,7 +30,7 @@ async function getBackdoorState() {
         .then(({ state }) => state)
         .catch(() => "off")
 
-    const backdoorIndicator = document.querySelector("#backdoorIndicator");
+    const backdoorIndicator = document.querySelector(".widget-backdoor");
 
     const hiddenClass = "hidden";
     backdoorIndicator.classList.add(hiddenClass)
@@ -38,7 +38,7 @@ async function getBackdoorState() {
         backdoorIndicator.classList.remove(hiddenClass)
     }
 
-    [...document.querySelectorAll(".item")]
+    [...document.querySelectorAll(".widget-clock")]
         .forEach(e => e.style.filter = backdoorState === "on" ? "invert(100%)" : "");
 }
 
@@ -47,7 +47,7 @@ function addMessage(messageJson) {
 
     const div = document.createElement("div");
     div.innerText = `@${message.username}: ${message.text}\n`;
-    document.querySelector("#chatWidget").appendChild(div);
+    document.querySelector(".widget-chat").appendChild(div);
 }
 
 renderTimer();
