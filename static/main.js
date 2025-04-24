@@ -95,9 +95,14 @@ function addMessage(messageJson) {
 const dvdWidth = 1570, dvdHeight = 922, dvd = document.querySelector(".widget-dvd");
 let dvdLastRenderTime = Date.now(), dx = 0.3, dy = 0.3;
 let x = Math.floor(Math.random() * dvdWidth), y = Math.floor(Math.random() * dvdHeight);
+let dvdHue = 0;
 
 function setDvdRandomColor() {
-    document.querySelector("#dvd").setAttribute("fill", `hsl(${Math.random() * 360}, 100%, 50%)`);
+    const hueHalfGuard = 30;
+
+    dvdHue = (dvdHue + hueHalfGuard + Math.random() * (360 - 2 * hueHalfGuard)) % 360;
+
+    document.querySelector("#dvd").setAttribute("fill", `hsl(${dvdHue}, 100%, 50%)`);
 }
 
 function animateDvd() {
