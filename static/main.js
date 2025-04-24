@@ -1,7 +1,7 @@
 const digits = [...document.querySelectorAll(".clock-digit")];
 const positions = [8, 9, 5, 6, 0, 1, 2, 3, 11, 12, 14, 15, 17, 18, 20, 21, 22];
 const offset = new Date().getTimezoneOffset() * 60000;
-let lastTime = "", recorder;
+let lastTime = "";
 
 function renderTimer() {
     const time = new Date(Date.now() - offset).toISOString();
@@ -22,52 +22,18 @@ async function startCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     const videoElement = document.querySelector(".camera");
     videoElement.srcObject = stream;
-
-    // let recordedChunks = [];
-
-    // recorder = new MediaRecorder(stream);
-    // recorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
-
-    // recorder.onstop = () => {
-    //     const blob = new Blob(recordedChunks, { type: "video/webm" });
-    //     const url = URL.createObjectURL(blob);
-    //     const filename = (new Date()).toISOString().replace(/[:T]/g, "-").split(".")[0] + ".webm";
-
-    //     URL.revokeObjectURL(url);
-    // };
-
-    // setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
-    // recorder.start();
 }
 
-async function getBackdoorState() {
-    const backdoorState = await fetch("./backdoor")
-        .then(res => res.json())
-        .then(({ state }) => state)
-        .catch(() => "off")
+async function onData(paramsJson) {
+    debugger;
+    const params = JSON.parse(paramsJson);
 
-    const backdoorIndicator = document.querySelector(".widget-backdoor");
+    document.querySelector(".widget-temperature").innerText = params.temp;
+    document.querySelector(".widget-co2").innerText = params.co2;
 
-    const hiddenClass = "hidden";
-    backdoorIndicator.classList.add(hiddenClass)
-    if (backdoorState === "on") {
-        backdoorIndicator.classList.remove(hiddenClass)
-    }
+    document.querySelector(".widget-backdoor").classList[backdoor.state === "on" ? "remove" : "add"]("hidden");
 
-    [...document.querySelectorAll(".widget-clock")]
-        .forEach(e => e.style.filter = backdoorState === "on" ? "invert(100%)" : "");
-}
-
-async function getTemperatureAndCO2() {
-    const temp = await fetch("./temp")
-        .then(res => res.text());
-
-    document.querySelector(".widget-temperature").innerText = temp;
-
-    const co2 = await fetch("./co2")
-        .then(res => res.text());
-
-    document.querySelector(".widget-co2").innerText = co2;
+    document.querySelector(".widget-clock").style.filter = backdoor.state === "on" ? "invert(100%)" : "";
 }
 
 function addMessage(messageJson) {
@@ -122,10 +88,4 @@ if (location.href.includes("debug")) {
     [...document.querySelectorAll(".widget")].forEach(e => e.style.border = "5px white solid");
 } else {
     startCamera();
-
-    setInterval(getBackdoorState, 10000);
-    getBackdoorState();
-
-    setInterval(getTemperatureAndCO2, 10000);
-    getTemperatureAndCO2();
 }

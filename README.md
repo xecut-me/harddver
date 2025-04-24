@@ -18,7 +18,6 @@
 
 # Идеи
 
-Коммуникация через execute only
 Мощность в ваттах
 
 Видеофид: запись через ws, дробление по папкам (<10k), сжатие, ротация файлов, бекап, одна папка, шифрование открытым ключом
@@ -120,4 +119,24 @@ scp ~/Desktop/xecut/harddver/main.py kiosk@kiosk:/home/kiosk/harddver/main.py
 DISPLAY=:0 /usr/bin/chromium --kiosk --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream  http://192.168.1.58:8000/
 
 DISPLAY=:0 /usr/bin/chromium --kiosk --no-first-run --disable-infobars --noerrdialogs --use-fake-ui-for-media-stream file:///root/kiosk-website/index.html
+```
+
+# Запись
+
+```js
+let recordedChunks = [];
+
+recorder = new MediaRecorder(stream);
+recorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+
+recorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+    const filename = (new Date()).toISOString().replace(/[:T]/g, "-").split(".")[0] + ".webm";
+
+    URL.revokeObjectURL(url);
+};
+
+setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
+recorder.start();
 ```
