@@ -45,6 +45,10 @@ def get_temp():
 
 
 async def data_pusher(driver):
+    with open("./chat.json.log", "r") as file:
+        for line in file:
+            driver.execute_script("addMessage(arguments[0]);", line)
+
     while True:
         data = {}
 

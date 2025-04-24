@@ -26,9 +26,6 @@ driver = start_chrome()
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-with open("./chat.json.log", "r") as file:
-    for line in file:
-        driver.execute_script("addMessage(arguments[0]);", line)
+threading.Thread(target=data_pusher, args=(driver,)).start()
 
-data_pusher(driver)
 start_bot(driver)
