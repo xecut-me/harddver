@@ -61,7 +61,8 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @allowed_chats_only()
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     pullres = subprocess.run(["git", "pull"], capture_output=True, text=True)
-    await update.message.reply_text("🚀 git pull\n\n" + pullres.stdout.strip().split("origin/main")[1])
+    splits = pullres.stdout.strip().split("origin/main")
+    await update.message.reply_text("🚀 git pull\n\n" + splits[1] if len(splits) > 1 else splits[0])
 
     driver.quit()
     await update.message.reply_text("🚀 driver.quit() = ok, крешимся для перезапуска супервизором 😂")
