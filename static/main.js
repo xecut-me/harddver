@@ -25,7 +25,6 @@ async function startCamera() {
 }
 
 async function onData(paramsJson) {
-    debugger;
     const params = JSON.parse(paramsJson);
 
     document.querySelector(".widget-temperature").innerText = params.temp;

@@ -2,6 +2,7 @@ from secret import BACKDOOR_AUTH, BACKDOOR_URL
 from time import sleep
 import subprocess
 import requests
+import json
 import re
 
 
@@ -67,6 +68,6 @@ def data_pusher(driver):
         except Exception as e:
             print(e)
 
-        driver.execute_script("onData(arguments[0]);", data)
+        driver.execute_script("onData(arguments[0]);", json.dumps(data, ensure_ascii=False))
 
         sleep(10)
