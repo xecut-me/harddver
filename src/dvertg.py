@@ -62,10 +62,15 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     pullres = subprocess.run(["git", "pull"], capture_output=True, text=True)
     splits = pullres.stdout.strip().split("origin/main")
-    await update.message.reply_text("🚀 git pull\n\n" + splits[1] if len(splits) > 1 else splits[0])
-
+    split_text = (splits[1] if len(splits) > 1 else splits[0])[0:2000]
+    
     driver.quit()
-    await update.message.reply_text("🚀 driver.quit() = ok, крешимся для перезапуска супервизором 😂")
+
+    await update.message.reply_text("\n\n".join([
+        "🚀 git pull",
+        split_text,
+        "🚀 driver.quit() = ok, крешимся для перезапуска супервизором 😂"
+    ]))
     
     sys.exit(0)
 
