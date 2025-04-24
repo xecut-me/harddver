@@ -119,6 +119,7 @@ async def maclog_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text(f"non_person: {non_person}, person: {person}", disable_web_page_preview=True)
 
+
 async def just_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(json.dumps(update.to_dict(), ensure_ascii=False))
 
