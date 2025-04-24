@@ -110,7 +110,7 @@ async def maclog_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     non_person = 0
     person = 0
 
-    with open("logs/mac.log") as file:
+    with open("/home/kiosk/logs/mac.log") as file:
         for line in file:
             if line.split(" ")[2] in NON_PERSON_MACS:
                 non_person += 1
