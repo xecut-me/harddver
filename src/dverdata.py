@@ -1,7 +1,7 @@
 from secret import BACKDOOR_AUTH, BACKDOOR_URL
+from time import sleep
 import subprocess
 import requests
-import asyncio
 import re
 
 
@@ -44,7 +44,7 @@ def get_temp():
     return text_result
 
 
-async def data_pusher(driver):
+def data_pusher(driver):
     with open("./chat.json.log", "r") as file:
         for line in file:
             driver.execute_script("addMessage(arguments[0]);", line)
@@ -69,4 +69,4 @@ async def data_pusher(driver):
 
         driver.execute_script("onData(arguments[0]);", data)
 
-        await asyncio.sleep(10)
+        sleep(10)
