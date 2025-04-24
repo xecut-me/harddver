@@ -60,7 +60,7 @@ async def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @allowed_chats_only()
 async def deploy_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    pullres = subprocess.run(["git", "pull"])
+    pullres = subprocess.run(["git", "pull"], capture_output=True, text=True)
     await update.message.reply_text("🚀 git pull\n\n" + pullres.stdout.strip())
 
     driver.quit()
