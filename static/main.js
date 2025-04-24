@@ -92,7 +92,35 @@ function addMessage(messageJson) {
     widgetChat.scrollTop = widgetChat.scrollHeight;
 }
 
+const dvdWidth = 1570, dvdHeight = 922, dvd = document.querySelector(".widget-dvd");
+let dvdLastRenderTime = Date.now(), dx = 0.3, dy = 0.3;
+let x = Math.floor(Math.random() * dvdWidth), y = Math.floor(Math.random() * dvdHeight);
+
+function setDvdRandomColor() {
+    document.querySelector("#dvd").setAttribute("fill", `hsl(${Math.random() * 360}, 100%, 50%)`);
+}
+
+function animateDvd() {
+    let renderTime = Date.now();
+
+    x += dx * (renderTime - dvdLastRenderTime);
+    y += dy * (renderTime - dvdLastRenderTime);
+
+    if (x > dvdHeight) { x = 2 * dvdHeight - x; dx *= -1; setDvdRandomColor(); }
+    if (x < 0) { x = - x; dx *= -1; setDvdRandomColor(); }
+
+    if (y > dvdWidth) { y = 2 * dvdWidth - y; dy *= -1; setDvdRandomColor(); }
+    if (y < 0) { y = - y; dy *= -1; setDvdRandomColor(); }
+
+    dvdLastRenderTime = renderTime;
+
+    dvd.style.top = x + "px";
+    dvd.style.left = y + "px";
+    requestAnimationFrame(animateDvd);
+}
+
 renderTimer();
+animateDvd();
 
 if (location.href.includes("debug")) {
     document.querySelector(".widget-backdoor").classList.remove("hidden");

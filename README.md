@@ -27,6 +27,8 @@ git pull показывает было ли обновление
 инжектить данные вместо http запросов
 debug data stub
 визуальный drag and drop конструктор
+maclog без 0:0
+логи бьются на папки по 10k
 
 docker
 reinstall alpine
