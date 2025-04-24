@@ -78,10 +78,14 @@ body {
     height: 400px;
 }
 
-.camera {
-    width: 533px;
+.camera-container {
+    transform: rotate(-90deg);
     height: 400px;
+    width: 400px;
+}
 
+.camera {
+    width: 400px;
     transform: scaleX(-1);
     filter: brightness(3);
 }

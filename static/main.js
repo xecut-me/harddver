@@ -23,32 +23,21 @@ async function startCamera() {
     const videoElement = document.querySelector(".camera");
     videoElement.srcObject = stream;
 
-    let recordedChunks = [];
+    // let recordedChunks = [];
 
-    recorder = new MediaRecorder(stream);
-    recorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    // recorder = new MediaRecorder(stream);
+    // recorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
 
-    recorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: "video/webm" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
+    // recorder.onstop = () => {
+    //     const blob = new Blob(recordedChunks, { type: "video/webm" });
+    //     const url = URL.createObjectURL(blob);
+    //     const filename = (new Date()).toISOString().replace(/[:T]/g, "-").split(".")[0] + ".webm";
 
-        const now = new Date();
-        const filename = now.toISOString().replace(/[:T]/g, "-").split(".")[0] + ".webm";
+    //     URL.revokeObjectURL(url);
+    // };
 
-        a.style.display = "none";
-        a.href = url;
-        a.download = filename;
-
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        URL.revokeObjectURL(url);
-    };
-
-    setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
-    recorder.start();
+    // setInterval(() => { recorder.stop(); recorder.start(); }, 10000);
+    // recorder.start();
 }
 
 async function getBackdoorState() {
