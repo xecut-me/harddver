@@ -1,7 +1,0 @@
-#!/sbin/openrc-run
-
-name="macscan"
-command="/bin/sh"
-command_args="-c 'while true; do nmap -sn 192.168.1.0/24 | grep MAC > /home/kiosk/logs/mac.log; sleep 60; done'"
-command_background=true
-pidfile="/run/macscan.pid"

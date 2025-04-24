@@ -1,5 +1,5 @@
 from telegram.ext import Application, CommandHandler, TypeHandler, ContextTypes
-from secret import SECRET_TELEGRAM_API_KEY, NON_PERSON_MACS
+from secret import SECRET_TELEGRAM_API_KEY
 from dverchrome import DEFAULT_URL
 from telegram import Update
 from io import BytesIO
@@ -111,21 +111,6 @@ async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(text, disable_web_page_preview=True)
 
 
-@allowed_chats_only()
-async def maclog_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    non_person = 0
-    person = 0
-
-    with open("/home/kiosk/logs/mac.log") as file:
-        for line in file:
-            if line.split(" ")[2] in NON_PERSON_MACS:
-                non_person += 1
-            else:
-                person += 1
-    
-    await update.message.reply_text(f"non_person: {non_person}, person: {person}", disable_web_page_preview=True)
-
-
 async def just_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(json.dumps(update.to_dict(), ensure_ascii=False))
 
@@ -151,7 +136,6 @@ def start_bot(_driver):
     application.add_handler(CommandHandler("deploy", deploy_handler))
     application.add_handler(CommandHandler("url", url_handler))
     application.add_handler(CommandHandler("reload", reload_handler))
-    application.add_handler(CommandHandler("maclog", maclog_handler))
     application.add_handler(TypeHandler(Update, just_log))
     
     application.run_polling()
