@@ -1,5 +1,6 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from dverchrome import start_chrome
+from dverdata import data_pusher
 from functools import partial
 from dvertg import start_bot
 import threading
@@ -29,4 +30,5 @@ with open("./chat.json.log", "r") as file:
     for line in file:
         driver.execute_script("addMessage(arguments[0]);", line)
 
+data_pusher(driver)
 start_bot(driver)
