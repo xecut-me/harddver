@@ -40,9 +40,6 @@ body {
 .widget {
     position: absolute;
     overflow: hidden;
-
-    /* раскомментить для дебага */
-    /* border: 5px white solid; */
 }
 
 .widget-caption {

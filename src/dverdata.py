@@ -1,4 +1,4 @@
-from secret import BACKDOOR_AUTH, BACKDOOR_URL
+from secret import BACKDOOR_AUTH, BACKDOOR_URL, LOCK_STATUS_URL, DOOR_OPENED_URL
 from time import sleep
 import subprocess
 import requests
@@ -56,6 +56,16 @@ def get_data():
 
     try:
         data["backdoor"] = requests.get(BACKDOOR_URL, headers={"Authorization": BACKDOOR_AUTH}).json()["state"]
+    except Exception as e:
+        print(e)
+    
+    try:
+        data["lock"] = requests.get(LOCK_STATUS_URL, headers={"Authorization": BACKDOOR_AUTH}).json()["state"]
+    except Exception as e:
+        print(e)
+    
+    try:
+        data["opened"] = requests.get(DOOR_OPENED_URL, headers={"Authorization": BACKDOOR_AUTH}).json()["state"]
     except Exception as e:
         print(e)
     
