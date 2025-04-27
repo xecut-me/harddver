@@ -111,7 +111,7 @@ async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_log.write(message_json + "\n")
     chat_log.flush()
     
-    driver.execute_script("return addMessage(arguments[0]);", message_json)
+    driver.execute_script("return onData(arguments[0]);", message_json)
 
     text = "Спасибо, сообщение добавлено на дверь, заходи посмотреть ;) https://maps.app.goo.gl/8s1x3Zzptt5A8gpc7"
     await update.message.reply_text(text, disable_web_page_preview=True)

@@ -85,7 +85,7 @@ def get_data():
 def data_pusher(driver):
     with open("./chat.json.log", "r") as file:
         for line in file:
-            driver.execute_script("onMessage(arguments[0]);", line)
+            driver.execute_script("onData(arguments[0]);", line)
 
     while True:
         driver.execute_script("onData(arguments[0]);", get_data())

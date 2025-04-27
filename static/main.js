@@ -27,23 +27,27 @@ async function startCamera() {
 async function onData(paramsJson) {
     const params = JSON.parse(paramsJson);
 
-    document.querySelector(".widget-temperature").innerText = params.temp + " " + params.w;
-    document.querySelector(".widget-co2").innerText = params.co2;
+    if ("temp" in params) {
+        document.querySelector(".widget-temperature").innerText = params.temp + " " + params.w;
+    }
 
-    document.querySelector(".widget-backdoor").classList[params.backdoor === "on" ? "remove" : "add"]("hidden");
+    if ("co2" in params) {
+        document.querySelector(".widget-co2").innerText = params.co2;
+    }
 
-    document.querySelector(".widget-clock").style.filter = params.backdoor === "on" ? "invert(100%)" : "";
-}
+    if ("backdoor" in params) {
+        document.querySelector(".widget-backdoor").classList[params.backdoor === "on" ? "remove" : "add"]("hidden");
+        document.querySelector(".widget-clock").style.filter = params.backdoor === "on" ? "invert(100%)" : "";
+    }
 
-function onMessage(messageJson) {
-    const message = JSON.parse(messageJson);
+    if ("username" in params) {
+        const div = document.createElement("div");
+        div.innerText = `@${params.username}: ${params.text}\n`;
 
-    const div = document.createElement("div");
-    div.innerText = `@${message.username}: ${message.text}\n`;
-
-    const widgetChat = document.querySelector(".widget-chat");
-    widgetChat.appendChild(div);
-    widgetChat.scrollTop = widgetChat.scrollHeight;
+        const widgetChat = document.querySelector(".widget-chat");
+        widgetChat.appendChild(div);
+        widgetChat.scrollTop = widgetChat.scrollHeight;
+    }
 }
 
 const dvdWidth = 1570, dvdHeight = 922, dvd = document.querySelector(".widget-dvd");
