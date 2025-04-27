@@ -80,11 +80,12 @@ function animateDvd() {
 
 renderTimer();
 animateDvd();
+startCamera();
 
-if (location.href.includes("debug")) {
+if (location.toString().includes("debug")) {
     document.querySelector(".widget-backdoor").classList.remove("hidden");
 
-    [...document.querySelectorAll(".widget")].forEach(e => e.style.border = "5px white solid");
-} else {
-    startCamera();
+    [...document.querySelectorAll(".widget")].forEach(e => e.style.border = "3px white solid");
+
+    document.querySelector(".screen").style.animation = "unset";
 }

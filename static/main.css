@@ -111,6 +111,10 @@ body {
     overflow-y: auto;
 }
 
+.widget-chat::-webkit-scrollbar {
+    display: none;
+}
+
 .widget-pull-request {
     color: red;
     font-size: 80px;
