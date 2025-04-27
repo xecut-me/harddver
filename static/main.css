@@ -86,7 +86,7 @@ body {
 
 .camera {
     width: 400px;
-    transform: scaleX(-1);
+    transform: scaleY(-1);
     filter: brightness(3);
 }
 
@@ -106,7 +106,7 @@ body {
     background-color: #333;
     color: white;
     overflow-x: hidden;
-    font-size: 24px;
+    font-size: 20px;
     word-wrap: break-word;
     overflow-y: auto;
 }
