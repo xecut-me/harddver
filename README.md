@@ -27,6 +27,7 @@
 Визуальный drag and drop конструктор, resizable, config
 Виджеты: каждая картинка это виджет, изоляция, query selector, iife
 Баланс белого в картинке
+Не добавлять пустые
 
 Docker
 Reinstall alpine
