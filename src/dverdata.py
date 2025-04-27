@@ -6,9 +6,10 @@ import json
 import re
 
 
-def get_co2_emitted():
+def get_power_stat():
     J_total = 0
     J_current = 0
+    dJ_60sec = None
 
     with open("/home/kiosk/logs/power.log", "r") as file:
         for line in file:
@@ -21,6 +22,8 @@ def get_co2_emitted():
 
             if J < J_current:
                 J_total += J_current
+            else:
+                dJ_60sec = J - J_current
             
             J_current = J
     
@@ -31,7 +34,10 @@ def get_co2_emitted():
 
     CO2_kg_so_far = J_CO2_kg * J_total
 
-    return f"{CO2_kg_so_far:.3f} kg of CO₂ emitted so far"
+    co2_msg = f"{CO2_kg_so_far:.3f} kg of CO₂ emitted so far"
+    w_msg = f"{dJ_60sec / 60:.2f}W" if dJ_60sec else ""
+
+    return (co2_msg, w_msg)
 
 
 def get_temp():
@@ -59,7 +65,7 @@ def data_pusher(driver):
             print(e)
         
         try:
-            data["co2"] = get_co2_emitted()
+            data["co2"], data["w"] = get_power_stat()
         except Exception as e:
             print(e)
 
