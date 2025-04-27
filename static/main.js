@@ -35,7 +35,7 @@ async function onData(paramsJson) {
     document.querySelector(".widget-clock").style.filter = params.backdoor === "on" ? "invert(100%)" : "";
 }
 
-function addMessage(messageJson) {
+function onMessage(messageJson) {
     const message = JSON.parse(messageJson);
 
     const div = document.createElement("div");
@@ -83,7 +83,16 @@ animateDvd();
 startCamera();
 
 if (location.toString().includes("debug")) {
-    document.querySelector(".widget-backdoor").classList.remove("hidden");
+    onData(JSON.stringify({
+        "backdoor": "on",
+        "co2": "0.238 kg of CO₂ emitted so far",
+        "w": "3.26W",
+        "temp": "+63.0°C"
+    }));
+
+    for (let i = 0; i < 10; i++) {
+        onMessage(JSON.stringify({ username: "testuser", text: "test message " + i }));
+    }
 
     [...document.querySelectorAll(".widget")].forEach(e => e.style.border = "3px white solid");
 
