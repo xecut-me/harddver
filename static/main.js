@@ -27,7 +27,7 @@ async function startCamera() {
 async function onData(paramsJson) {
     const params = JSON.parse(paramsJson);
 
-    document.querySelector(".widget-temperature").innerText = params.temp;
+    document.querySelector(".widget-temperature").innerText = params.temp + " " + params.w;
     document.querySelector(".widget-co2").innerText = params.co2;
 
     document.querySelector(".widget-backdoor").classList[params.backdoor.state === "on" ? "remove" : "add"]("hidden");
