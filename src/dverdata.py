@@ -51,29 +51,33 @@ def get_temp():
     return text_result
 
 
+def get_data():
+    data = {}
+
+    try:
+        data["backdoor"] = requests.get(BACKDOOR_URL, headers={"Authorization": BACKDOOR_AUTH}).json()
+    except Exception as e:
+        print(e)
+    
+    try:
+        data["co2"], data["w"] = get_power_stat()
+    except Exception as e:
+        print(e)
+
+    try:
+        data["temp"] = get_temp()
+    except Exception as e:
+        print(e)
+
+    return json.dumps(data, ensure_ascii=False, indent=2)
+
+
 def data_pusher(driver):
     with open("./chat.json.log", "r") as file:
         for line in file:
             driver.execute_script("addMessage(arguments[0]);", line)
 
     while True:
-        data = {}
-
-        try:
-            data["backdoor"] = requests.get(BACKDOOR_URL, headers={"Authorization": BACKDOOR_AUTH}).json()
-        except Exception as e:
-            print(e)
-        
-        try:
-            data["co2"], data["w"] = get_power_stat()
-        except Exception as e:
-            print(e)
-
-        try:
-            data["temp"] = get_temp()
-        except Exception as e:
-            print(e)
-
-        driver.execute_script("onData(arguments[0]);", json.dumps(data, ensure_ascii=False))
+        driver.execute_script("onData(arguments[0]);", get_data())
 
         sleep(10)

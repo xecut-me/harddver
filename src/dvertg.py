@@ -1,6 +1,7 @@
 from telegram.ext import Application, CommandHandler, TypeHandler, ContextTypes
 from secret import SECRET_TELEGRAM_API_KEY
 from dverchrome import DEFAULT_URL
+from dverdata import get_data
 from telegram import Update
 from io import BytesIO
 from PIL import Image
@@ -116,6 +117,11 @@ async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(text, disable_web_page_preview=True)
 
 
+@allowed_chats_only()
+async def getdata_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(get_data(), disable_web_page_preview=True)
+
+
 async def just_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(json.dumps(update.to_dict(), ensure_ascii=False))
 
@@ -141,6 +147,7 @@ def start_bot(_driver):
     application.add_handler(CommandHandler("deploy", deploy_handler))
     application.add_handler(CommandHandler("url", url_handler))
     application.add_handler(CommandHandler("reload", reload_handler))
+    application.add_handler(CommandHandler("getdata", getdata_handler))
     application.add_handler(TypeHandler(Update, just_log))
     
     application.run_polling()
