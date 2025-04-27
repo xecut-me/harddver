@@ -92,14 +92,19 @@ async def screenshot_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
 @allowed_chats_only((admin_chat_id, xecut_chat_id), xecut_not_allowed)
 async def display_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.text:
-        await update.message.reply_text("Напиши текстом молю")
+        return
+    
+    text =  " ".join(update.message.text.split(" ")[1:]).strip()[0:500]
+
+    if not text:
+        await update.message.reply_text("Чтобы вывести сообщение напиши /display [ТВОЕ_СООБЩЕНИЕ]")
         return
     
     if not update.message.from_user.username:
         await update.message.reply_text("Заведи пожалуйста юзернейм в настройках телеги")
         return
     
-    message = {"username": update.message.from_user.username, "text": " ".join(update.message.text.split(" ")[1:])}
+    message = {"username": update.message.from_user.username, "text": text}
     message_json = json.dumps(message, ensure_ascii=False)
 
     chat_log.write(message_json + "\n")
