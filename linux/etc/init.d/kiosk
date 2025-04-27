@@ -8,7 +8,7 @@ pidfile="/run/kiosk.pid"
 command_user="kiosk:kiosk"
 directory="/home/kiosk/harddver"
 supervisor="supervise-daemon"
-supervise_daemon_args="--respawn-delay 5 --respawn-max 0 --respawn-period 60 --stdout /home/kiosk/logs/kiosk.log --stderr /home/kiosk/logs/kiosk.err"
+supervise_daemon_args="--respawn-delay 1 --respawn-max 0 --respawn-period 1 --stdout /home/kiosk/logs/kiosk.log --stderr /home/kiosk/logs/kiosk.err"
 
 start_pre() {
     export DISPLAY=:0

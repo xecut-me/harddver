@@ -55,7 +55,7 @@ def get_data():
     data = {}
 
     try:
-        data["backdoor"] = requests.get(BACKDOOR_URL, headers={"Authorization": BACKDOOR_AUTH}).json()
+        data["backdoor"] = requests.get(BACKDOOR_URL, headers={"Authorization": BACKDOOR_AUTH}).json()["state"]
     except Exception as e:
         print(e)
     
