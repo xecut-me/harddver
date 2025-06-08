@@ -18,7 +18,7 @@ def get_power_stat():
             if not line:
                 continue
 
-            J = int(line) / 1_000_000
+            J = int(re.sub(r'\D+', '', line, flags=re.ASCII)) / 1_000_000
 
             if J < J_current:
                 J_total += J_current
