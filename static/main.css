@@ -30,8 +30,8 @@ body {
 
 .screen {
     position: relative;
-    width: 1920px;
-    height: 1080px;
+    width: 1080px;
+    height: 1920px;
     background-color: black;
     animation: drift 60s linear infinite;
     overflow: hidden;
@@ -60,11 +60,6 @@ body {
     background-repeat: no-repeat;
 }
 
-.widget-images {
-    display: flex;
-    justify-content: space-between;
-}
-
 .clock-item {
     width: 68px;
     height: 150px;
@@ -75,10 +70,8 @@ body {
     height: 400px;
 }
 
-.camera-container {
+.widget-camera {
     transform: rotate(-90deg);
-    height: 400px;
-    width: 400px;
 }
 
 .camera {
