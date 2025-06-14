@@ -35,10 +35,10 @@ async function onData(paramsJson) {
         document.querySelector(".widget-co2").innerText = params.co2;
     }
 
-    if ("backdoor" in params) {
-        document.querySelector(".widget-backdoor").classList[params.backdoor === "on" ? "remove" : "add"]("hidden");
-        document.querySelector(".widget-clock").style.filter = params.backdoor === "on" ? "invert(100%)" : "";
-    }
+    // if ("backdoor" in params) {
+    //     document.querySelector(".widget-backdoor").classList[params.backdoor === "on" ? "remove" : "add"]("hidden");
+    //     document.querySelector(".widget-clock").style.filter = params.backdoor === "on" ? "invert(100%)" : "";
+    // }
 
     if ("username" in params) {
         const div = document.createElement("div");
@@ -88,7 +88,7 @@ startCamera();
 
 if (location.toString().includes("debug")) {
     onData(JSON.stringify({
-        "backdoor": "on",
+        // "backdoor": "on",
         "co2": "0.238 kg of CO₂ emitted so far",
         "w": "3.26W",
         "temp": "+63.0°C"
