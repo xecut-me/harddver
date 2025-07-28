@@ -5,7 +5,7 @@ import qrcode
 import qrcode.image.svg
 
 
-def sign_token_v1(user_id: str, priority: int = 1, max_daily_messages: int = 100, max_tokens: int = 4096, valid_days: int = 7, authority: str = "tg"):
+def sign_token_v1(user_id: str, priority: int = 1, max_daily_messages: int = 100, max_tokens: int = 4096, valid_days: int = 7, authority: str = "xecut"):
     values = [user_id, priority, max_daily_messages, max_tokens, authority]
     user_id, priority, max_daily_messages, max_tokens, authority = [str(value).replace("|", "_") for value in values]
 
@@ -14,7 +14,7 @@ def sign_token_v1(user_id: str, priority: int = 1, max_daily_messages: int = 100
 
     message = user_id + "|" + priority + "|" + max_daily_messages + "|" + max_tokens + "|" + valid_until + "|" + version + "|" + authority
 
-    signature_raw = hmac.new(keys[authority].encode(), message.encode(), hashlib.sha256).digest()
+    signature_raw = hmac.new(TIGOR_XECUT_SECRET.encode(), message.encode(), hashlib.sha256).digest()
     signature = base64.urlsafe_b64encode(signature_raw).decode()
 
     return "Authorization: Bearer " + message + "|" + signature
