@@ -22,5 +22,5 @@ def get_ai_token():
 
     qr = segno.make(token, error='M')
 
-    return qr.svg_data_uri(scale=12, dark="#0f0", light="#000", unit='px')
+    return qr.svg_data_uri(scale=12, border=0, dark="#0f0", light="#000", unit='px')
 
