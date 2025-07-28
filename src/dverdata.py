@@ -1,4 +1,5 @@
-from secret import BACKDOOR_AUTH, BACKDOOR_URL, LOCK_STATUS_URL, DOOR_OPENED_URL
+from secret import BACKDOOR_AUTH, LOCK_STATUS_URL, DOOR_OPENED_URL
+from aitoken import get_ai_token
 from time import sleep
 import subprocess
 import requests
@@ -76,6 +77,11 @@ def get_data():
 
     try:
         data["temp"] = get_temp()
+    except Exception as e:
+        print(e)
+    
+    try:
+        data["ai_token"] = get_ai_token()
     except Exception as e:
         print(e)
 

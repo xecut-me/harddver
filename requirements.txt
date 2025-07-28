@@ -3,3 +3,4 @@ python-telegram-bot==20.5
 mss==10.0.0
 pillow==11.2.1
 websockets==15.0.1
+qrcode[pil]==8.2

@@ -35,6 +35,10 @@ async function onData(paramsJson) {
         document.querySelector(".widget-co2").innerText = params.co2;
     }
 
+    if ("ai_token" in params) {
+        document.querySelector(".widget-ai-token").innerHTML = params.ai_token;
+    }
+
     // if ("backdoor" in params) {
     //     document.querySelector(".widget-backdoor").classList[params.backdoor === "on" ? "remove" : "add"]("hidden");
     //     document.querySelector(".widget-clock").style.filter = params.backdoor === "on" ? "invert(100%)" : "";
