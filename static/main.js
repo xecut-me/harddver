@@ -36,7 +36,7 @@ async function onData(paramsJson) {
     }
 
     if ("ai_token" in params) {
-        document.querySelector(".widget-ai-token").innerHTML = params.ai_token;
+        document.querySelector(".ai-token").src = params.ai_token;
     }
 
     // if ("backdoor" in params) {

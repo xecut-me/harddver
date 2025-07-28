@@ -1,6 +1,5 @@
-import datetime, hashlib, qrcode, base64, hmac, time, io
+import datetime, hashlib, base64, segno, hmac, time
 from secret import TIGOR_XECUT_SECRET
-import qrcode.image.svg
 
 
 def sign_token_v1(user_id: str, priority: int = 1, max_daily_messages: int = 100, max_tokens: int = 4096, valid_days: int = 7, authority: str = "xecut"):
@@ -21,8 +20,7 @@ def sign_token_v1(user_id: str, priority: int = 1, max_daily_messages: int = 100
 def get_ai_token():
     token = sign_token_v1("xecut_" + str((time.time() // 60 * 60) % 10))
 
-    img = qrcode.make(token, image_factory=qrcode.image.svg.SvgImage)
-    buffer = io.BytesIO()
-    img.save(buffer)
+    qr = segno.make(token, error='M')
 
-    return buffer.getvalue().decode('utf-8')
+    return qr.svg_data_uri(scale=12, dark="#0f0", light="#000", unit='px')
+
