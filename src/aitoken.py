@@ -14,13 +14,12 @@ def sign_token_v1(user_id: str, priority: int = 1, max_daily_messages: int = 100
     signature_raw = hmac.new(TIGOR_XECUT_SECRET.encode(), message.encode(), hashlib.sha256).digest()
     signature = base64.urlsafe_b64encode(signature_raw).decode()
 
-    return "Authorization: Bearer " + message + "|" + signature
+    return message + "|" + signature
 
 
 def get_ai_token():
-    token = sign_token_v1("xecut_" + str((time.time() // 60 * 60) % 10))
+    token = "sms:tigor_ai_token&body=" + sign_token_v1("xecut_" + str((time.time() // 60 * 60) % 10))
 
     qr = segno.make(token, error='M')
 
     return qr.svg_data_uri(scale=12, border=0, dark="#0f0", light="#000", unit='px')
-
