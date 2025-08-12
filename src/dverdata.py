@@ -1,5 +1,6 @@
 from secret import BACKDOOR_AUTH, LOCK_STATUS_URL, DOOR_OPENED_URL
 from aitoken import get_ai_token
+from dverarp import get_device_count
 from time import sleep
 import subprocess
 import requests
@@ -54,11 +55,6 @@ def get_temp():
 
 def get_data():
     data = {}
-
-    # try:
-    #     data["backdoor"] = requests.get(BACKDOOR_URL, headers={"Authorization": BACKDOOR_AUTH}).json()["state"]
-    # except Exception as e:
-    #     print(e)
     
     try:
         data["lock"] = requests.get(LOCK_STATUS_URL, headers={"Authorization": BACKDOOR_AUTH}).json()["state"]
@@ -82,6 +78,11 @@ def get_data():
     
     try:
         data["ai_token"] = get_ai_token()
+    except Exception as e:
+        print(e)
+    
+    try:
+        data["devices"] = get_device_count()
     except Exception as e:
         print(e)
 

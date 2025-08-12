@@ -74,7 +74,7 @@ vim ~/harddver/secret.py
 
 ```bash
 apk add --no-cache xorg-server xf86-video-intel xf86-input-evdev xinit chromium openbox chromium \
-    chromium-chromedriver udev ttf-freefont dbus bash curl ca-certificates xdg-utils
+    chromium-chromedriver udev ttf-freefont dbus bash curl ca-certificates xdg-utils arp-scan
 
 pip install -r requirements.txt --break-system-packages
 ```

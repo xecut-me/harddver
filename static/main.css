@@ -122,6 +122,11 @@ body {
     font-size: 40px;
 }
 
+.widget-devices {
+    color: white;
+    font-size: 30px;
+}
+
 .ai-token {
     width: 250px;
     height: 250px;
